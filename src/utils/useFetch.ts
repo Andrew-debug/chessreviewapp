@@ -3,16 +3,16 @@ import { useEffect, useState } from "react";
 const useFetch = (
   default_url_value: string,
   default_data = null,
-  autorequest: string
+  autorequest?: boolean
 ) => {
   const [url, seturl] = useState(default_url_value);
   const [data, setData] = useState(default_data);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const fetchDataAction = async () => {
     if (url) {
       try {
+        console.log("req", url);
         setIsLoading(true);
         const response = await fetch(url);
         const jsonData = await response.json();

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import useFetch from "../utils/useFetch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArchivedGame from "./ArchivedGame";
 import { Container } from "./NavBar";
 import FetchComponent from "./FetchComponent";
@@ -23,20 +23,27 @@ const InputWrap = styled.div`
 
 function GamesHisory({ setcurrentPgn }: { setcurrentPgn: (pgn: any) => void }) {
   const [username, setUsername] = useState("GothamChess");
-//@ts-ignore
+  //@ts-ignore
   const useGamesFetch = useFetch(
     `https://api.chess.com/pub/player/${username}/games/2023/06`
   );
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+    const updatedUrl = `https://api.chess.com/pub/player/${e.target.value}/games/2023/06`;
+    useGamesFetch.seturl(updatedUrl);
+  };
+
   return (
     <Container>
       <FetchComponent
-      //@ts-ignore
+        //@ts-ignore
         useFetchStates={useGamesFetch}
         DataVisualisation={
           <GamesContainer>
             <button onClick={useGamesFetch.resetData}>{"<="}</button>
             {useGamesFetch.data &&
-            //@ts-ignore
+              //@ts-ignore
               [...useGamesFetch.data.games.slice(-20)]
                 .reverse()
                 // .slice(0, 20)
@@ -60,12 +67,7 @@ function GamesHisory({ setcurrentPgn }: { setcurrentPgn: (pgn: any) => void }) {
           <div style={{ color: "var(--white-primary)" }}>
             Use Chess.com username
           </div>
-          <input
-            defaultValue={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-          />
+          <input onChange={handleUsernameChange} />
           <button onClick={useGamesFetch.fetchDataAction}>Fetch Data</button>
         </InputWrap>
       </FetchComponent>
