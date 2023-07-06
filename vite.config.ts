@@ -10,5 +10,6 @@ export default defineConfig({
     },
     cors: true,
   },
+  base: "/chesscomts",
   plugins: [react()],
 });
