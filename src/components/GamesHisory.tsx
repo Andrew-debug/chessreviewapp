@@ -67,7 +67,7 @@ function GamesHisory({ setcurrentPgn }: { setcurrentPgn: (pgn: any) => void }) {
           <div style={{ color: "var(--white-primary)" }}>
             Use Chess.com username
           </div>
-          <input onChange={handleUsernameChange} />
+          <input defaultValue={username} onChange={handleUsernameChange} />
           <button onClick={useGamesFetch.fetchDataAction}>Fetch Data</button>
         </InputWrap>
       </FetchComponent>
