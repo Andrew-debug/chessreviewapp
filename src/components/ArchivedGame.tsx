@@ -14,6 +14,7 @@ import {
   WhiteSquare,
   WinComponent,
 } from "../styles/archivedGameStyles";
+import { ArchivedGameProps, GameProps } from "../types";
 
 const BlitzComponent = () => {
   return (
@@ -70,18 +71,24 @@ const CustomComponent = () => {
     </div>
   );
 };
-//@ts-ignore
-const GameResultSquare = ({ item, username }) => {
+
+const GameResultSquare = ({
+  game,
+  username,
+}: {
+  game: GameProps;
+  username: string;
+}) => {
   const lowerCurrentUsername = String(username).toLowerCase();
 
   const [userResult, oponentResult] = {
-    [String(item.white.username).toLowerCase()]: [
-      item.white.result,
-      item.black.result,
+    [String(game.white.username).toLowerCase()]: [
+      game.white.result,
+      game.black.result,
     ],
-    [String(item.black.username).toLowerCase()]: [
-      item.black.result,
-      item.white.result,
+    [String(game.black.username).toLowerCase()]: [
+      game.black.result,
+      game.white.result,
     ],
   }[lowerCurrentUsername];
   if (userResult === "win") {
@@ -104,11 +111,17 @@ const GameResultSquare = ({ item, username }) => {
     );
   }
 };
-//@ts-ignore
-function ArchivedGame({ pgn, setcurrentPgn, item, username }) {
+
+function ArchivedGame({
+  pgn,
+  setcurrentPgn,
+  game,
+  username,
+}: ArchivedGameProps) {
   const [isHovered, setisHovered] = useState(false);
-  const whiteResult = item.white.result;
-  const blackResult = item.black.result;
+  const whiteResult = game.white.result;
+  const blackResult = game.black.result;
+  console.log(pgn);
   return (
     <ArchivedGameContainer>
       <GameWrap
@@ -127,41 +140,37 @@ function ArchivedGame({ pgn, setcurrentPgn, item, username }) {
           <div style={{ display: "flex", alignItems: "center" }}>
             <Tooltip
               title={
-                //@ts-ignore
                 {
                   blitz: "Blitz game",
                   rapid: "Rapid game",
                   daily: "Daily game",
                   bullet: "Bullet game",
-                }[item.time_class] || "Custom game"
+                }[game.time_class] || "Custom game"
               }
               placement="top"
             >
               <div>
-                {
-                  //@ts-ignore
-                  {
-                    blitz: <BlitzComponent />,
-                    rapid: <RapidComponent />,
-                    daily: <DailyComponent />,
-                    bullet: <BulletComponent />,
-                  }[item.time_class] || <CustomComponent />
-                }
+                {{
+                  blitz: <BlitzComponent />,
+                  rapid: <RapidComponent />,
+                  daily: <DailyComponent />,
+                  bullet: <BulletComponent />,
+                }[game.time_class] || <CustomComponent />}
               </div>
             </Tooltip>
             <div>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <WhiteSquare whiteResult={whiteResult} />
-                <span style={{ fontSize: 16 }}>{item.white.username}</span>
+                <span style={{ fontSize: 16 }}>{game.white.username}</span>
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <BlackSquare blackResult={blackResult} />
-                <span style={{ fontSize: 16 }}>{item.black.username}</span>
+                <span style={{ fontSize: 16 }}>{game.black.username}</span>
               </div>
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <GameResultSquare item={item} username={username} />
+            <GameResultSquare game={game} username={username} />
             <div style={{ marginLeft: 30 }}>{pgn.headers[2].value}</div>
           </div>
         </div>
@@ -171,12 +180,12 @@ function ArchivedGame({ pgn, setcurrentPgn, item, username }) {
               ? "var(--button-hovered)"
               : "var(--white-primary-dim)",
           }}
-          href={item.url}
+          href={game.url}
           target="_blank"
           onMouseEnter={() => setisHovered(true)}
           onMouseLeave={() => setisHovered(false)}
         >
-          {item.url}
+          {game.url}
         </a>
       </GameWrap>
     </ArchivedGameContainer>

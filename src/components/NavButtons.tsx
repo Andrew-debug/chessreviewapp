@@ -6,9 +6,13 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
-//@ts-ignore
-//prettier-ignore
-function NavButtons({game,setGame,setcurrentMoveNumber,currentPgn,currentMoveNumber,setPiecesTurn,
+function NavButtons({
+  game,
+  setGame,
+  setcurrentMoveNumber,
+  currentPgn,
+  currentMoveNumber,
+  setPiecesTurn,
 }) {
   const [btnHover, setBtnHover] = useState(0);
 
@@ -71,9 +75,7 @@ function NavButtons({game,setGame,setcurrentMoveNumber,currentPgn,currentMoveNum
             onClick={() => {
               game.undo();
               setGame({ ...game });
-              //@ts-ignore
               setcurrentMoveNumber((prev) => (prev > -1 ? prev - 1 : prev));
-              //@ts-ignore
               setPiecesTurn((prev) => (prev === "white" ? "black" : "white"));
             }}
             disabled={
@@ -111,9 +113,7 @@ function NavButtons({game,setGame,setcurrentMoveNumber,currentPgn,currentMoveNum
               const gameCopy = { ...game };
               gameCopy.move(currentPgn.moves[currentMoveNumber + 1]?.move);
               setGame(gameCopy);
-              //@ts-ignore
               setcurrentMoveNumber((prev) => prev + 1);
-              //@ts-ignore
               setPiecesTurn((prev) => (prev === "white" ? "black" : "white"));
             }}
             disabled={
@@ -154,7 +154,6 @@ function NavButtons({game,setGame,setcurrentMoveNumber,currentPgn,currentMoveNum
             onClick={() => {
               const gameCopy = { ...game };
               gameCopy.reset();
-              //@ts-ignore
               currentPgn.moves.forEach((item) => gameCopy.move(item.move));
               setGame(gameCopy);
               setcurrentMoveNumber(currentPgn.moves.length - 1);

@@ -12,7 +12,6 @@ const useFetch = (
   const fetchDataAction = async () => {
     if (url) {
       try {
-        console.log("req", url);
         setIsLoading(true);
         const response = await fetch(url);
         const jsonData = await response.json();

@@ -1,19 +1,26 @@
 import { BlackStyles, WhiteStyles } from "../styles/blackWhiteMoveStyles";
-//@ts-ignore
-//prettier-ignore
-function BlackWhiteMove({wm,bm,index,gameReviewData,currentPgn,game,setGame,setcurrentMoveNumber,currentMoveNumber,
-}) {
+import { BlackWhiteMoveProps } from "../types";
+
+function BlackWhiteMove({
+  wm,
+  bm,
+  index,
+  gameReviewData,
+  currentPgn,
+  game,
+  setGame,
+  setcurrentMoveNumber,
+  currentMoveNumber,
+}: BlackWhiteMoveProps) {
+  console.log(game);
   let white_color;
   let black_color;
   if (gameReviewData) {
-    
     const white_moves_review = gameReviewData.all_moves.filter(
-      //@ts-ignore
-      (_, index) => index % 2 === 0
+      (_: any, index: number) => index % 2 === 0
     );
     const black_moves_review = gameReviewData.all_moves.filter(
-      //@ts-ignore
-      (_, index) => index % 2 !== 0
+      (_: any, index: number) => index % 2 !== 0
     );
     const white_scorr_diff =
       white_moves_review[index]?.score -
@@ -24,7 +31,7 @@ function BlackWhiteMove({wm,bm,index,gameReviewData,currentPgn,game,setGame,setc
     const black_scorr_diff = black_moves_review[index]
       ? black_moves_review[index].score - white_moves_review[index]?.score
       : 0;
-//@ts-ignore
+
     function evalDiffToColor(evalDiff) {
       if (evalDiff < 10 && evalDiff > -10) {
         return "white";
@@ -70,7 +77,6 @@ function BlackWhiteMove({wm,bm,index,gameReviewData,currentPgn,game,setGame,setc
           gameCopy.reset();
           currentPgn.moves
             .slice(0, index * 2 + 1)
-            //@ts-ignore
             .forEach((item) => gameCopy.move(item.move));
           setGame(gameCopy);
           setcurrentMoveNumber(index * 2);
@@ -87,7 +93,6 @@ function BlackWhiteMove({wm,bm,index,gameReviewData,currentPgn,game,setGame,setc
           gameCopy.reset();
           currentPgn.moves
             .slice(0, index * 2 + 2) // they come in pairs, black is 2nd (odd)
-            //@ts-ignore
             .forEach((item) => gameCopy.move(item.move));
           setGame(gameCopy);
           setcurrentMoveNumber(index * 2 + 1);

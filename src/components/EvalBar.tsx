@@ -8,10 +8,7 @@ const Bar = styled.div`
   overflow: hidden;
 `;
 
-interface Props {
-  evalScore: number;
-}
-const BlackBar = styled.div<Props>`
+const BlackBar = styled.div`
   background-color: var(--white-primary);
   bottom: 0;
   height: 100%;
@@ -20,11 +17,10 @@ const BlackBar = styled.div<Props>`
   transition: transform 1s ease-in;
   width: 100%;
   z-index: 1;
-  transform: ${({ evalScore }) =>
+  transform: ${({ evalScore }: { evalScore: number }) =>
     `translate3d(0px, ${100 - (evalScore / 100 + 5) * 10}%, 0px)`};
 `;
 
-//@ts-ignore
 function EvalBar({ game, bestMove, tmp, piecesTurn, setPiecesTurn }) {
   // const [evaluation, setEvaluation] = useState(30);
   // const [latestDependency, setLatestDependency] = useState(positionEval);

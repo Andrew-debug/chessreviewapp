@@ -1,18 +1,15 @@
 import { ReactNode } from "react";
 import Loader from "../utils/Loader";
-//@ts-ignore
-//prettier-ignore
-const FetchComponent = ({children,useFetchStates,DataVisualisation,CustomErrorRenderer,
+
+const FetchComponent = ({
+  children,
+  useFetchStates,
+  DataVisualisation,
+  CustomErrorRenderer,
 }: {
   children?: ReactNode;
 }) => {
-  const { 
-    data, 
-    // setData, 
-    isLoading, 
-    error, 
-    // fetchDataAction 
-  } = useFetchStates;
+  const { data, setData, isLoading, error, fetchDataAction } = useFetchStates;
   if (isLoading) {
     return <Loader />;
   }

@@ -1,7 +1,6 @@
 import { forwardRef, useState } from "react";
 
 const CustomSquareRenderer = forwardRef((props, ref) => {
-  //@ts-ignore
   const { children, style } = props;
   const [clicked, setclicked] = useState(false);
   const [mouseDown, setmouseDown] = useState(false);
@@ -15,7 +14,6 @@ const CustomSquareRenderer = forwardRef((props, ref) => {
 
   return (
     <div
-      //@ts-ignore
       ref={ref}
       style={st}
       onContextMenu={() => {

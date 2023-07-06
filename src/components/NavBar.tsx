@@ -25,9 +25,15 @@ const HorizontalMoveList = styled.div`
   padding: 10px 15px;
   font-size: 14px;
 `;
-//@ts-ignore
-//prettier-ignore
-function NavBar({currentPgn,game,setGame,setcurrentMoveNumber,currentMoveNumber,piecesTurn,setPiecesTurn,
+
+function NavBar({
+  currentPgn,
+  game,
+  setGame,
+  setcurrentMoveNumber,
+  currentMoveNumber,
+  piecesTurn,
+  setPiecesTurn,
 }) {
   const whiteMoves: string[] = [];
   const blackMoves: string[] = [];
@@ -41,7 +47,7 @@ function NavBar({currentPgn,game,setGame,setcurrentMoveNumber,currentMoveNumber,
     });
   }
   const allMoves = _.zip(whiteMoves, blackMoves);
-//@ts-ignore
+
   const useGamesFetch = useFetch();
   // useEffect(() => {
   //   useGamesFetch.resetData();
@@ -60,10 +66,7 @@ function NavBar({currentPgn,game,setGame,setcurrentMoveNumber,currentMoveNumber,
       </div> */}
       {/* <PossibleEngineMoves /> */}
       <HorizontalMoveList>
-        
-        {
-          //@ts-ignore
-        allMoves.map(([wm, bm]: string[], index: number) => {
+        {allMoves.map(([wm, bm]: string[], index: number) => {
           return (
             <div key={index} style={{ display: "flex" }}>
               <BlackWhiteMove
@@ -98,7 +101,6 @@ function NavBar({currentPgn,game,setGame,setcurrentMoveNumber,currentMoveNumber,
           setcurrentMoveNumber={setcurrentMoveNumber}
           currentPgn={currentPgn}
           currentMoveNumber={currentMoveNumber}
-          //@ts-ignore
           piecesTurn={piecesTurn}
           setPiecesTurn={setPiecesTurn}
         />

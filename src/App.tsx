@@ -2,7 +2,7 @@ import { useState, useEffect, useSyncExternalStore } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import { stockfishResultsUpdated } from "./stockfishEvents";
-//@ts-ignore
+//@ts-expect-error
 import { Pgn } from "../node_modules/cm-pgn/src/Pgn.js";
 //
 import GamesHisory from "./components/GamesHisory";
@@ -26,7 +26,7 @@ function App({
     () => JSON.stringify(stockfishInterface.getResults())
   ); // TODO: remake on separate signals
   const { bestMove, positionEval } = JSON.parse(stockfish_results);
-  //@ts-ignore
+
   const [game, setGame] = useState(new Chess());
   const [currentPgn, setcurrentPgn] = useState<IPgn | undefined>(undefined);
   const [currentMoveNumber, setcurrentMoveNumber] = useState(-1); // TODO counter can't be > moves.length
