@@ -59,8 +59,8 @@ function App({
   return (
     <div>
       {/* <h1 style={{ color: "white" }}>{game.fen()}</h1> */}
-      <h1 style={{ color: "white" }}>{bestMove}</h1>
-      <h1 style={{ color: "white" }}>{positionEval}</h1>
+      <h1 style={{ color: "white" }}>Best move: {bestMove}</h1>
+      {/* <h1 style={{ color: "white" }}>{positionEval}</h1> */}
       <div style={{ display: "flex", alignItems: "center" }}>
         <GamesHisory setcurrentPgn={setcurrentPgn} />
 

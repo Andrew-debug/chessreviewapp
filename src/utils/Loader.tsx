@@ -60,7 +60,7 @@ const LoaderWrap = styled.div`
     transform: translateZ(20px);
   }
 `;
-function Loader({ size }: { size: number }) {
+function Loader({ size }: { size?: number }) {
   return (
     <div style={{ transform: `scale(${size})` }}>
       <LoaderWrap>

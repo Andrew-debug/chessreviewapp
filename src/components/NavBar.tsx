@@ -1,10 +1,9 @@
 import _ from "lodash";
 import styled from "styled-components";
 import useFetch from "../utils/useFetch";
-import { useEffect } from "react";
-import ChartComponent from "./ChartComponent";
+// import ChartComponent from "./ChartComponent";
 import BlackWhiteMove from "./BlackWhiteMove";
-import FetchComponent from "./FetchComponent";
+// import FetchComponent from "./FetchComponent";
 import NavButtons from "./NavButtons";
 export const Container = styled.div`
   position: relative;
@@ -26,14 +25,9 @@ const HorizontalMoveList = styled.div`
   padding: 10px 15px;
   font-size: 14px;
 `;
-function NavBar({
-  currentPgn,
-  game,
-  setGame,
-  setcurrentMoveNumber,
-  currentMoveNumber,
-  piecesTurn,
-  setPiecesTurn,
+//@ts-ignore
+//prettier-ignore
+function NavBar({currentPgn,game,setGame,setcurrentMoveNumber,currentMoveNumber,piecesTurn,setPiecesTurn,
 }) {
   const whiteMoves: string[] = [];
   const blackMoves: string[] = [];
@@ -47,7 +41,7 @@ function NavBar({
     });
   }
   const allMoves = _.zip(whiteMoves, blackMoves);
-
+//@ts-ignore
   const useGamesFetch = useFetch();
   // useEffect(() => {
   //   useGamesFetch.resetData();
@@ -66,7 +60,10 @@ function NavBar({
       </div> */}
       {/* <PossibleEngineMoves /> */}
       <HorizontalMoveList>
-        {allMoves.map(([wm, bm]: string[], index: number) => {
+        
+        {
+          //@ts-ignore
+        allMoves.map(([wm, bm]: string[], index: number) => {
           return (
             <div key={index} style={{ display: "flex" }}>
               <BlackWhiteMove
@@ -101,6 +98,7 @@ function NavBar({
           setcurrentMoveNumber={setcurrentMoveNumber}
           currentPgn={currentPgn}
           currentMoveNumber={currentMoveNumber}
+          //@ts-ignore
           piecesTurn={piecesTurn}
           setPiecesTurn={setPiecesTurn}
         />

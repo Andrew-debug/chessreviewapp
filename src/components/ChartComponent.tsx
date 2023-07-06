@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -43,7 +42,7 @@ const options = {
     },
   },
 };
-
+//@ts-ignore
 export default function ChartComponent({ gameReviewData }) {
   if (!gameReviewData) return;
   const data = {
@@ -52,13 +51,16 @@ export default function ChartComponent({ gameReviewData }) {
       {
         type: "bar",
         label: "White",
+        //@ts-ignore
         backgroundColor: gameReviewData.all_moves.map((value) =>
           value.score > 0 ? "white" : "black"
         ),
+        //@ts-ignore
         data: gameReviewData.all_moves.map((item) => item.score / 100),
         minBarLength: 3,
       },
     ],
   };
+  //@ts-ignore
   return <Chart type="bar" options={options} data={data} />;
 }

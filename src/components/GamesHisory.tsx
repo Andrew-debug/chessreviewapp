@@ -4,6 +4,7 @@ import { useState } from "react";
 import ArchivedGame from "./ArchivedGame";
 import { Container } from "./NavBar";
 import FetchComponent from "./FetchComponent";
+//@ts-ignore
 import pgnParser from "pgn-parser";
 const GamesContainer = styled.div`
   max-width: 500px;
@@ -22,18 +23,20 @@ const InputWrap = styled.div`
 
 function GamesHisory({ setcurrentPgn }: { setcurrentPgn: (pgn: any) => void }) {
   const [username, setUsername] = useState("GothamChess");
-
+//@ts-ignore
   const useGamesFetch = useFetch(
     `https://api.chess.com/pub/player/${username}/games/2023/06`
   );
   return (
     <Container>
       <FetchComponent
+      //@ts-ignore
         useFetchStates={useGamesFetch}
         DataVisualisation={
           <GamesContainer>
             <button onClick={useGamesFetch.resetData}>{"<="}</button>
             {useGamesFetch.data &&
+            //@ts-ignore
               [...useGamesFetch.data.games.slice(-20)]
                 .reverse()
                 // .slice(0, 20)

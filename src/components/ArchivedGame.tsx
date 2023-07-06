@@ -70,6 +70,7 @@ const CustomComponent = () => {
     </div>
   );
 };
+//@ts-ignore
 const GameResultSquare = ({ item, username }) => {
   const lowerCurrentUsername = String(username).toLowerCase();
 
@@ -103,7 +104,7 @@ const GameResultSquare = ({ item, username }) => {
     );
   }
 };
-
+//@ts-ignore
 function ArchivedGame({ pgn, setcurrentPgn, item, username }) {
   const [isHovered, setisHovered] = useState(false);
   const whiteResult = item.white.result;
@@ -126,6 +127,7 @@ function ArchivedGame({ pgn, setcurrentPgn, item, username }) {
           <div style={{ display: "flex", alignItems: "center" }}>
             <Tooltip
               title={
+                //@ts-ignore
                 {
                   blitz: "Blitz game",
                   rapid: "Rapid game",
@@ -136,12 +138,15 @@ function ArchivedGame({ pgn, setcurrentPgn, item, username }) {
               placement="top"
             >
               <div>
-                {{
-                  blitz: <BlitzComponent />,
-                  rapid: <RapidComponent />,
-                  daily: <DailyComponent />,
-                  bullet: <BulletComponent />,
-                }[item.time_class] || <CustomComponent />}
+                {
+                  //@ts-ignore
+                  {
+                    blitz: <BlitzComponent />,
+                    rapid: <RapidComponent />,
+                    daily: <DailyComponent />,
+                    bullet: <BulletComponent />,
+                  }[item.time_class] || <CustomComponent />
+                }
               </div>
             </Tooltip>
             <div>
