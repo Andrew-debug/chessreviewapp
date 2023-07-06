@@ -20,7 +20,7 @@ const BlackBar = styled.div`
     `translate3d(0px, ${100 - (evalScore / 100 + 5) * 10}%, 0px)`};
 `;
 
-function EvalBar({ game, bestMove, positionEval, piecesTurn, setPiecesTurn }) {
+function EvalBar({ game, bestMove, tmp, piecesTurn, setPiecesTurn }) {
   // const [evaluation, setEvaluation] = useState(30);
   // const [latestDependency, setLatestDependency] = useState(positionEval);
 
@@ -47,12 +47,12 @@ function EvalBar({ game, bestMove, positionEval, piecesTurn, setPiecesTurn }) {
   // if (evaluation > 400) evalScore = 400;
   // if (evaluation < -400) evalScore = -400;
 
-  if (piecesTurn === "black") {
-    positionEval = positionEval * -1;
-  }
-  let evalScore = positionEval;
-  if (positionEval > 400) evalScore = 400;
-  if (positionEval < -400) evalScore = -400;
+  // if (piecesTurn === "black") {
+  //   positionEval = positionEval * -1;
+  // }
+  let evalScore = tmp;
+  if (tmp > 400) evalScore = 400;
+  if (tmp < -400) evalScore = -400;
   return (
     <Bar>
       <div
@@ -65,13 +65,13 @@ function EvalBar({ game, bestMove, positionEval, piecesTurn, setPiecesTurn }) {
       >
         <div
           style={{
-            color: positionEval > 0 ? "black" : "white",
+            color: tmp > 0 ? "black" : "white",
             position: "absolute",
-            top: positionEval > 0 ? 530 : 0,
+            top: tmp > 0 ? 530 : 0,
             left: 12,
           }}
         >
-          {(positionEval / 100).toFixed(1)}
+          {(tmp / 100).toFixed(1)}
         </div>
       </div>
       <BlackBar evalScore={evalScore} />

@@ -37,6 +37,16 @@ function App({
     // setcurrentEval({ score: 0, is_mate: false });
   }, [currentPgn]);
 
+  const [tmp, setTmp] = useState(0);
+  useEffect(() => {
+    if (piecesTurn === "black") {
+      const tmp1 = positionEval * -1;
+      setTmp(tmp1);
+      return;
+    }
+    setTmp(positionEval);
+  }, [positionEval]);
+
   useEffect(() => {
     const pgn = new Pgn(game.pgn());
     const uci_moves = pgn.history.moves.map((val: { uci: string }) => val.uci);
@@ -76,7 +86,7 @@ function App({
             <EvalBar
               game={game}
               bestMove={bestMove}
-              positionEval={positionEval}
+              tmp={tmp}
               piecesTurn={piecesTurn}
               setPiecesTurn={setPiecesTurn}
             />
