@@ -1,3 +1,9 @@
+import { ChessInstance } from "chess.js";
+import { ParsedPGN } from "pgn-parser";
+import { SetStateAction, Dispatch } from "react";
+import { ReactNode } from "react";
+type Dispatcher<S> = Dispatch<SetStateAction<S>>;
+
 export interface StockfishInterface {
   depth: number;
   setDepth: (depth: number) => void;
@@ -10,12 +16,12 @@ export interface IPgn {
   comments: null | string;
   comments_above_header: null | string;
   headers: { value: string }[];
-  moves: {}[];
+  moves: PieceMove[];
   rawPgn: string;
   result: string;
 }
 
-export interface GameProps {
+export interface UsersGameData {
   url: string;
   black: {
     username: string;
@@ -29,26 +35,46 @@ export interface GameProps {
 }
 
 export interface ArchivedGameProps {
-  pgn: IPgn;
-  setcurrentPgn: (pgn: IPgn) => void;
-  game: GameProps;
+  pgn: ParsedPGN;
+  setcurrentPgn: (pgn: ParsedPGN) => void;
+  usersGameData: UsersGameData;
   username: string;
 }
 
+export interface PieceMove {
+  move: string;
+  move_number: number;
+}
+
 export interface BlackWhiteMoveProps {
-  wm: {
-    move: string;
-  };
-  bm: {
-    move: string;
-  };
+  wm: PieceMove;
+  bm: PieceMove;
   index: number;
-  gameReviewData: {
-    all_moves: string[];
-  };
   currentPgn: IPgn;
-  game: IPgn;
-  setGame: (pgn: IPgn) => void;
+  game: ChessInstance;
+  setGame: Dispatcher<ChessInstance>;
   setcurrentMoveNumber: (move: number) => void;
   currentMoveNumber: number;
+}
+
+export interface NavBarProps {
+  currentPgn: IPgn;
+  game: ChessInstance;
+  setGame: Dispatcher<ChessInstance>;
+  currentMoveNumber: number;
+  setcurrentMoveNumber: (move: number) => void;
+  setPiecesTurn: (piece: string) => void;
+}
+
+export interface FetchComponentProps {
+  children: ReactNode;
+  useFetchStates: {
+    data: {
+      games: UsersGameData[];
+    } | null;
+    isLoading: boolean;
+    error: any;
+  };
+  DataVisualisation: ReactNode;
+  CustomErrorRenderer?: any;
 }

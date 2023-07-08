@@ -5,123 +5,25 @@ import blitz from "../assets/blitz.svg";
 import bullet from "../assets/bullet.svg";
 import custom from "../assets/custom.svg";
 import daily from "../assets/daily.svg";
+import { ArchivedGameProps } from "../types";
 import {
   ArchivedGameContainer,
   BlackSquare,
-  DrawComponent,
   GameWrap,
-  LoseComponent,
   WhiteSquare,
-  WinComponent,
 } from "../styles/archivedGameStyles";
-import { ArchivedGameProps, GameProps } from "../types";
+import GameIcon from "../utils/GameIcon";
+import GameResultSquare from "./GameResultSquare";
 
-const BlitzComponent = () => {
-  return (
-    <div style={{ width: 40, height: 40 }}>
-      <img
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
-        src={blitz}
-        alt="blitz"
-      />
-    </div>
-  );
-};
-const RapidComponent = () => {
-  return (
-    <div style={{ width: 30, height: 30 }}>
-      <img
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
-        src={rapid}
-        alt="rapid"
-      />
-    </div>
-  );
-};
-const DailyComponent = () => {
-  return (
-    <div style={{ width: 30, height: 30 }}>
-      <img
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
-        src={daily}
-        alt="daily"
-      />
-    </div>
-  );
-};
-const BulletComponent = () => {
-  return (
-    <div style={{ width: 20, height: 20 }}>
-      <img
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
-        src={bullet}
-        alt="bullet"
-      />
-    </div>
-  );
-};
-const CustomComponent = () => {
-  return (
-    <div style={{ width: 30, height: 30 }}>
-      <img
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
-        src={custom}
-        alt="custom"
-      />
-    </div>
-  );
-};
-
-const GameResultSquare = ({
-  game,
-  username,
-}: {
-  game: GameProps;
-  username: string;
-}) => {
-  const lowerCurrentUsername = String(username).toLowerCase();
-
-  const [userResult, oponentResult] = {
-    [String(game.white.username).toLowerCase()]: [
-      game.white.result,
-      game.black.result,
-    ],
-    [String(game.black.username).toLowerCase()]: [
-      game.black.result,
-      game.white.result,
-    ],
-  }[lowerCurrentUsername];
-  if (userResult === "win") {
-    return (
-      <WinComponent>
-        <span>+</span>
-      </WinComponent>
-    );
-  } else if (oponentResult === "win") {
-    return (
-      <LoseComponent>
-        <span>-</span>
-      </LoseComponent>
-    );
-  } else {
-    return (
-      <DrawComponent>
-        <span>=</span>
-      </DrawComponent>
-    );
-  }
-};
-
-function ArchivedGame({
+const ArchivedGame = ({
   pgn,
   setcurrentPgn,
-  game,
+  usersGameData,
   username,
-}: ArchivedGameProps) {
+}: ArchivedGameProps) => {
   const [isHovered, setisHovered] = useState(false);
-  const whiteResult = game.white.result;
-  const blackResult = game.black.result;
-  console.log(pgn);
+  const whiteResult = usersGameData.white.result;
+  const blackResult = usersGameData.black.result;
   return (
     <ArchivedGameContainer>
       <GameWrap
@@ -145,33 +47,42 @@ function ArchivedGame({
                   rapid: "Rapid game",
                   daily: "Daily game",
                   bullet: "Bullet game",
-                }[game.time_class] || "Custom game"
+                }[usersGameData.time_class] || "Custom game"
               }
               placement="top"
             >
               <div>
                 {{
-                  blitz: <BlitzComponent />,
-                  rapid: <RapidComponent />,
-                  daily: <DailyComponent />,
-                  bullet: <BulletComponent />,
-                }[game.time_class] || <CustomComponent />}
+                  blitz: <GameIcon icon={blitz} size={40} alt="blitz" />,
+                  rapid: <GameIcon icon={rapid} size={30} alt="rapid" />,
+                  daily: <GameIcon icon={daily} size={30} alt="daily" />,
+                  bullet: <GameIcon icon={bullet} size={20} alt="bullet" />,
+                }[usersGameData.time_class] || (
+                  <GameIcon icon={custom} size={30} alt="custom" />
+                )}
               </div>
             </Tooltip>
             <div>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <WhiteSquare whiteResult={whiteResult} />
-                <span style={{ fontSize: 16 }}>{game.white.username}</span>
+                <span style={{ fontSize: 16 }}>
+                  {usersGameData.white.username}
+                </span>
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <BlackSquare blackResult={blackResult} />
-                <span style={{ fontSize: 16 }}>{game.black.username}</span>
+                <span style={{ fontSize: 16 }}>
+                  {usersGameData.black.username}
+                </span>
               </div>
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <GameResultSquare game={game} username={username} />
-            <div style={{ marginLeft: 30 }}>{pgn.headers[2].value}</div>
+            <GameResultSquare
+              usersGameData={usersGameData}
+              username={username}
+            />
+            <div style={{ marginLeft: 30 }}>{pgn.headers![2].value}</div>
           </div>
         </div>
         <a
@@ -180,16 +91,16 @@ function ArchivedGame({
               ? "var(--button-hovered)"
               : "var(--white-primary-dim)",
           }}
-          href={game.url}
+          href={usersGameData.url}
           target="_blank"
           onMouseEnter={() => setisHovered(true)}
           onMouseLeave={() => setisHovered(false)}
         >
-          {game.url}
+          {usersGameData.url}
         </a>
       </GameWrap>
     </ArchivedGameContainer>
   );
-}
+};
 
 export default ArchivedGame;

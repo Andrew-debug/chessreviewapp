@@ -28,8 +28,10 @@ function App({
   const { bestMove, positionEval } = JSON.parse(stockfish_results);
 
   const [game, setGame] = useState(new Chess());
-  const [currentPgn, setcurrentPgn] = useState<IPgn | undefined>(undefined);
+  const [currentPgn, setcurrentPgn] = useState<IPgn>();
   const [currentMoveNumber, setcurrentMoveNumber] = useState(-1); // TODO counter can't be > moves.length
+  //State doesn't update if it's the same. so don't bind rerenders to piecesTurn state
+  const [piecesTurn, setPiecesTurn] = useState("white"); // TODO: !!!!!!!fix turn change for navbar when clicking on black turn.
   useEffect(() => {
     game.reset();
     setGame({ ...game });
@@ -39,11 +41,20 @@ function App({
 
   const [tmp, setTmp] = useState(0);
   useEffect(() => {
-    if (piecesTurn === "black") {
-      const tmp1 = positionEval * -1;
-      setTmp(tmp1);
-      return;
-    }
+    // if (piecesTurn === "black") {
+    //   const tmp1 = positionEval * -1;
+    //   setTmp(tmp1);
+    // }
+    // else if (piecesTurn === "white" && positionEval < 0) {
+    //   const tmp1 = positionEval * -1;
+    //   setTmp(tmp1);
+    // } else if (piecesTurn === "black" && positionEval < 0) {
+    //   const tmp1 = positionEval;
+    //   setTmp(tmp1);
+    // } else if (piecesTurn === "white" && positionEval > 0) {
+    //   const tmp1 = positionEval;
+    //   setTmp(tmp1);
+    // }
     setTmp(positionEval);
   }, [positionEval]);
 
@@ -54,15 +65,16 @@ function App({
     // console.log("SET POSITION AAAAAAAAAAAA");
   }, [currentMoveNumber]);
 
-  // state doesn't update if it's the same. so don't bind rerenders to this state
-  const [piecesTurn, setPiecesTurn] = useState("white");
   return (
     <div>
       {/* <h1 style={{ color: "white" }}>{game.fen()}</h1> */}
       <h1 style={{ color: "white" }}>Best move: {bestMove}</h1>
       <h1 style={{ color: "white" }}>evaluation bar numbers: {positionEval}</h1>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <GamesHisory setcurrentPgn={setcurrentPgn} />
+        <GamesHisory
+          setPiecesTurn={setPiecesTurn}
+          setcurrentPgn={setcurrentPgn}
+        />
 
         <div style={{ margin: "0 20px" }}>
           <div
@@ -119,12 +131,11 @@ function App({
           </div>
         </div>
         <NavBar
-          currentPgn={currentPgn}
+          currentPgn={currentPgn!}
           game={game}
           setGame={setGame}
           setcurrentMoveNumber={setcurrentMoveNumber}
           currentMoveNumber={currentMoveNumber}
-          piecesTurn={piecesTurn}
           setPiecesTurn={setPiecesTurn}
         />
       </div>

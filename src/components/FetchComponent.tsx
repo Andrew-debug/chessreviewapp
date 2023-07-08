@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { FetchComponentProps } from "../types";
 import Loader from "../utils/Loader";
 
 const FetchComponent = ({
@@ -6,10 +6,8 @@ const FetchComponent = ({
   useFetchStates,
   DataVisualisation,
   CustomErrorRenderer,
-}: {
-  children?: ReactNode;
-}) => {
-  const { data, setData, isLoading, error, fetchDataAction } = useFetchStates;
+}: FetchComponentProps) => {
+  const { data, isLoading, error } = useFetchStates;
   if (isLoading) {
     return <Loader />;
   }

@@ -1,10 +1,11 @@
 import _ from "lodash";
 import styled from "styled-components";
-import useFetch from "../utils/useFetch";
+// import useFetch from "../utils/useFetch";
 // import ChartComponent from "./ChartComponent";
 import BlackWhiteMove from "./BlackWhiteMove";
 // import FetchComponent from "./FetchComponent";
 import NavButtons from "./NavButtons";
+import { NavBarProps, PieceMove } from "../types";
 export const Container = styled.div`
   position: relative;
   display: flex;
@@ -32,13 +33,12 @@ function NavBar({
   setGame,
   setcurrentMoveNumber,
   currentMoveNumber,
-  piecesTurn,
   setPiecesTurn,
-}) {
-  const whiteMoves: string[] = [];
-  const blackMoves: string[] = [];
+}: NavBarProps) {
+  const whiteMoves: PieceMove[] = [];
+  const blackMoves: PieceMove[] = [];
   if (currentPgn) {
-    currentPgn.moves.map((item: string, index: number) => {
+    currentPgn.moves.map((item, index) => {
       if (index % 2 === 0) {
         whiteMoves.push(item);
       } else {
@@ -48,7 +48,7 @@ function NavBar({
   }
   const allMoves = _.zip(whiteMoves, blackMoves);
 
-  const useGamesFetch = useFetch();
+  // const useGamesFetch = useFetch();
   // useEffect(() => {
   //   useGamesFetch.resetData();
   //   useGamesFetch.seturl(
@@ -66,13 +66,13 @@ function NavBar({
       </div> */}
       {/* <PossibleEngineMoves /> */}
       <HorizontalMoveList>
-        {allMoves.map(([wm, bm]: string[], index: number) => {
+        {allMoves.map(([wm, bm], index) => {
           return (
             <div key={index} style={{ display: "flex" }}>
               <BlackWhiteMove
-                gameReviewData={useGamesFetch.data}
-                wm={wm}
-                bm={bm}
+                // gameReviewData={useGamesFetch.data}
+                wm={wm!}
+                bm={bm!}
                 game={game}
                 index={index}
                 currentPgn={currentPgn}
@@ -101,7 +101,6 @@ function NavBar({
           setcurrentMoveNumber={setcurrentMoveNumber}
           currentPgn={currentPgn}
           currentMoveNumber={currentMoveNumber}
-          piecesTurn={piecesTurn}
           setPiecesTurn={setPiecesTurn}
         />
       </div>

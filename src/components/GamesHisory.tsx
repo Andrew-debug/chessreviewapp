@@ -1,28 +1,21 @@
-import styled from "styled-components";
-import useFetch from "../utils/useFetch";
 import { useState } from "react";
+import { IPgn } from "../types";
+import pgnParser from "pgn-parser";
+
 import ArchivedGame from "./ArchivedGame";
 import { Container } from "./NavBar";
 import FetchComponent from "./FetchComponent";
+import useFetch from "../utils/useFetch";
+import { GamesContainer, InputWrap } from "../styles/GameHistoryStyles";
 
-import pgnParser from "pgn-parser";
-const GamesContainer = styled.div`
-  max-width: 500px;
-  max-height: 800px;
-  overflow-x: hidden;
-`;
-
-const InputWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`;
-
-function GamesHisory({ setcurrentPgn }: { setcurrentPgn: (pgn: any) => void }) {
-  const [username, setUsername] = useState("GothamChess");
+function GamesHisory({
+  setcurrentPgn,
+  setPiecesTurn,
+}: {
+  setcurrentPgn: (pgn: IPgn) => void;
+  setPiecesTurn: (pieceTurn: string) => void;
+}) {
+  const [username, setUsername] = useState("kaarelen");
 
   const useGamesFetch = useFetch(
     `https://api.chess.com/pub/player/${username}/games/2023/06`
@@ -40,19 +33,28 @@ function GamesHisory({ setcurrentPgn }: { setcurrentPgn: (pgn: any) => void }) {
         useFetchStates={useGamesFetch}
         DataVisualisation={
           <GamesContainer>
-            <button onClick={useGamesFetch.resetData}>{"<="}</button>
+            <button
+              onClick={() => {
+                setPiecesTurn("white"); //TODO: if user presses the button, the pgn of the game stays, if he keeps scrolling moves, evalbar will be incorrect
+                useGamesFetch.resetData();
+              }}
+            >
+              {"<="}
+            </button>
             {useGamesFetch.data &&
               [...useGamesFetch.data.games.slice(-20)]
                 .reverse()
                 // .slice(0, 20)
-                .map((game, index) => {
-                  const pgn = pgnParser.parse(game.pgn)[0];
-                  pgn.rawPgn = game.pgn;
+                .map((usersGameData, index) => {
+                  const pgn = pgnParser.parse(usersGameData.pgn)[0];
+                  //@ts-ignore
+                  pgn.rawPgn = usersGameData.pgn;
                   return (
                     <ArchivedGame
                       key={index}
-                      game={game}
+                      usersGameData={usersGameData}
                       pgn={pgn}
+                      //@ts-ignore
                       setcurrentPgn={setcurrentPgn}
                       username={username}
                     />

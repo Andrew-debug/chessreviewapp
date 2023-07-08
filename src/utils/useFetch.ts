@@ -6,7 +6,7 @@ const useFetch = (
   autorequest?: boolean
 ) => {
   const [url, seturl] = useState(default_url_value);
-  const [data, setData] = useState(default_data);
+  const [data, setData] = useState<any>(default_data);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const fetchDataAction = async () => {
