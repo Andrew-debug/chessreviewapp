@@ -1,5 +1,8 @@
 import { BlackStyles, WhiteStyles } from "../styles/blackWhiteMoveStyles";
-import { BlackWhiteMoveProps, PieceMove } from "../types";
+import {
+  BlackWhiteMoveProps,
+  // PieceMove
+} from "../types";
 
 function BlackWhiteMove({
   wm,

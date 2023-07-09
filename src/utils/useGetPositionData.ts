@@ -12,7 +12,6 @@ export const useGetPositionData = () => {
     },
     () => JSON.stringify(stockfishInterface.getResults())
   ); // TODO: remake on separate signals
-
   const { bestMove, positionEval } = JSON.parse(stockfish_results);
 
   return { bestMove, positionEval };
