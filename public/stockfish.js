@@ -1,4 +1,4 @@
-chessreviewapp/stockfish/*!
+/*!
  * Stockfish.js (c) Chess.com, LLC
  * https://github.com/nmrugg/stockfish.js
  * License: GPLv3
