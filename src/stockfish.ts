@@ -2,9 +2,10 @@ import { config } from "../package.json";
 import debounce from "lodash.debounce";
 import { stockfishResultsUpdated } from "./stockfishEvents.ts";
 
-let fishPath = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ?
-  "node_modules/stockfish/src/stockfish.js" :
-  "/chessreviewapp/stockfish.js"
+let fishPath =
+  !process.env.NODE_ENV || process.env.NODE_ENV === "development"
+    ? "node_modules/stockfish/src/stockfish.js"
+    : "/chessreviewapp/stockfish.js";
 
 // init stockfish
 const stockfish = new Worker(fishPath);
@@ -17,12 +18,13 @@ const notifyFront = () => {
   globalThis.dispatchEvent(stockfishResultsUpdated);
 };
 const stPost = (command: string) => {
-  console.log("SEND :::: ", command);
+  // console.log("SEND :::: ", command);
   stockfish.postMessage(command);
 };
 stPost("uci");
 stPost(
-  `setoption name Threads value ${(window.navigator.hardwareConcurrency || 2) - 1
+  `setoption name Threads value ${
+    (window.navigator.hardwareConcurrency || 2) - 1
   }`
 );
 stPost("setoption name Hash value 512");
@@ -47,7 +49,7 @@ export const stockfishInterface = {
 // main message handler
 stockfish.onmessage = (event: any) => {
   if (config.talkative_fish) {
-    console.log("SF ::: ", event.data);
+    // console.log("SF ::: ", event.data);
   }
   let dataChanged = false;
   const engine_analisys_regex = event.data.match(/\s.* cp (-?\d+).* pv (.+)/);
