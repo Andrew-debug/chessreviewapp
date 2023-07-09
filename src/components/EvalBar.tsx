@@ -1,78 +1,53 @@
-import styled from "styled-components";
+import { useState, useEffect } from "react";
+import { Bar, BlackBar } from "../styles";
+import { useGetPositionData } from "../utils/useGetPositionData.ts";
 
-const Bar = styled.div`
-  position: relative;
-  width: 40px;
-  background-color: var(--black-primary);
-  margin: 0 10px;
-  overflow: hidden;
-`;
+function EvalBar({ piecesTurn }: { piecesTurn: string }) {
+  const [filteredEval, setFilteredEval] = useState(0);
 
-const BlackBar = styled.div`
-  background-color: var(--white-primary);
-  bottom: 0;
-  height: 100%;
-  left: 0;
-  position: absolute;
-  transition: transform 1s ease-in;
-  width: 100%;
-  z-index: 1;
-  transform: ${({ evalScore }: { evalScore: number }) =>
-    `translate3d(0px, ${100 - (evalScore / 100 + 5) * 10}%, 0px)`};
-`;
+  const { positionEval } = useGetPositionData();
 
-function EvalBar({ game, bestMove, tmp, piecesTurn, setPiecesTurn }) {
-  // const [evaluation, setEvaluation] = useState(30);
-  // const [latestDependency, setLatestDependency] = useState(positionEval);
+  useEffect(() => {
+    if (piecesTurn === "black") {
+      // reverse eval because stockfish sends data from POV of white only
+      const reversedEval = positionEval * -1;
+      setFilteredEval(reversedEval);
+    } else {
+      setFilteredEval(positionEval);
+    }
+  }, [positionEval]);
 
-  // useEffect(() => {
-  //   let isMounted = true;
-
-  //   if (isMounted && latestDependency === positionEval) {
-  //     setEvaluation(positionEval);
-  //     if (piecesTurn === "black") {
-  //       setEvaluation((prev) => prev * -1);
-  //     }
-  //   }
-
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, [positionEval, latestDependency]);
-
-  // useEffect(() => {
-  //   setLatestDependency(positionEval);
-  // }, [positionEval]);
-
-  // let evalScore = evaluation;
-  // if (evaluation > 400) evalScore = 400;
-  // if (evaluation < -400) evalScore = -400;
-
-  // if (piecesTurn === "black") {
-  //   positionEval = positionEval * -1;
-  // }
-  let evalScore = tmp;
-  if (tmp > 400) evalScore = 400;
-  if (tmp < -400) evalScore = -400;
+  let evalScore = filteredEval;
+  if (!evalScore) evalScore = 0;
+  if (filteredEval > 400) evalScore = 400;
+  if (filteredEval < -400) evalScore = -400;
   return (
     <Bar>
       <div
         style={{
           position: "absolute",
           zIndex: 2,
-          fontSize: 14,
-          color: "white",
+          fontSize: 11,
+          fontWeight: 600,
+          color: "var(--white-primary)",
         }}
       >
         <div
           style={{
-            color: tmp > 0 ? "black" : "white",
+            color:
+              filteredEval > 0
+                ? "var(--black-primary)"
+                : "var(--white-primary)",
             position: "absolute",
-            top: tmp > 0 ? 530 : 0,
-            left: 12,
+            top: filteredEval > 0 ? 680 : 5,
+            left: 6,
           }}
         >
-          {(tmp / 100).toFixed(1)}
+          {filteredEval
+            ? evalScore < 0
+              ? Math.abs(filteredEval / 100).toFixed(1)
+              : (filteredEval / 100).toFixed(1)
+            : "0.0"}
         </div>
       </div>
       <BlackBar evalScore={evalScore} />

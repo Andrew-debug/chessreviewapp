@@ -1,144 +1,25 @@
-import { useState, useEffect, useSyncExternalStore } from "react";
-import { Chessboard } from "react-chessboard";
-import { Chess } from "chess.js";
-import { stockfishResultsUpdated } from "./stockfishEvents";
-//@ts-expect-error
-import { Pgn } from "../node_modules/cm-pgn/src/Pgn.js";
+import { useState } from "react";
+import { IPgn } from "./types/index.js";
 //
 import GamesHisory from "./components/GamesHisory";
-import EvalBar from "./components/EvalBar";
-import NavBar from "./components/NavBar";
-import CustomSquareRenderer from "./components/CustomSquareRenderer.js";
-import { IPgn, StockfishInterface } from "./types/index.js";
+import MainContent from "./components/MainContent.js";
 
-function App({
-  stockfishInterface,
-}: {
-  stockfishInterface: StockfishInterface;
-}) {
-  const stockfish_results = useSyncExternalStore(
-    (callback) => {
-      addEventListener(stockfishResultsUpdated.type, callback);
-      return () => {
-        removeEventListener(stockfishResultsUpdated.type, callback);
-      };
-    },
-    () => JSON.stringify(stockfishInterface.getResults())
-  ); // TODO: remake on separate signals
-  const { bestMove, positionEval } = JSON.parse(stockfish_results);
-
-  const [game, setGame] = useState(new Chess());
+function App() {
   const [currentPgn, setcurrentPgn] = useState<IPgn>();
-  const [currentMoveNumber, setcurrentMoveNumber] = useState(-1); // TODO counter can't be > moves.length
   //State doesn't update if it's the same. so don't bind rerenders to piecesTurn state
-  const [piecesTurn, setPiecesTurn] = useState("white"); // TODO: !!!!!!!fix turn change for navbar when clicking on black turn.
-  useEffect(() => {
-    game.reset();
-    setGame({ ...game });
-    setcurrentMoveNumber(-1);
-    // setcurrentEval({ score: 0, is_mate: false });
-  }, [currentPgn]);
-
-  const [tmp, setTmp] = useState(0);
-  useEffect(() => {
-    // if (piecesTurn === "black") {
-    //   const tmp1 = positionEval * -1;
-    //   setTmp(tmp1);
-    // }
-    // else if (piecesTurn === "white" && positionEval < 0) {
-    //   const tmp1 = positionEval * -1;
-    //   setTmp(tmp1);
-    // } else if (piecesTurn === "black" && positionEval < 0) {
-    //   const tmp1 = positionEval;
-    //   setTmp(tmp1);
-    // } else if (piecesTurn === "white" && positionEval > 0) {
-    //   const tmp1 = positionEval;
-    //   setTmp(tmp1);
-    // }
-    setTmp(positionEval);
-  }, [positionEval]);
-
-  useEffect(() => {
-    const pgn = new Pgn(game.pgn());
-    const uci_moves = pgn.history.moves.map((val: { uci: string }) => val.uci);
-    stockfishInterface.setPosition(uci_moves.join(" "));
-    // console.log("SET POSITION AAAAAAAAAAAA");
-  }, [currentMoveNumber]);
+  const [piecesTurn, setPiecesTurn] = useState("white"); // TODO: !!!!!!!fix turn change for navbar when clicking on black/white turn.
 
   return (
-    <div>
-      {/* <h1 style={{ color: "white" }}>{game.fen()}</h1> */}
-      <h1 style={{ color: "white" }}>Best move: {bestMove}</h1>
-      <h1 style={{ color: "white" }}>evaluation bar numbers: {positionEval}</h1>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <GamesHisory
-          setPiecesTurn={setPiecesTurn}
-          setcurrentPgn={setcurrentPgn}
-        />
-
-        <div style={{ margin: "0 20px" }}>
-          <div
-            style={{
-              height: 40,
-              border: "1px solid white",
-              marginBottom: 10,
-              color: "white",
-            }}
-          >
-            <span style={{ display: "flex" }}>
-              <span style={{ marginRight: 10 }}>
-                {currentPgn ? currentPgn.headers[5].value : "Opponent"}
-              </span>
-              <span>
-                {currentPgn ? `(${currentPgn.headers[14].value})` : ""}
-              </span>
-            </span>
-          </div>
-          <div style={{ display: "flex" }}>
-            <EvalBar
-              game={game}
-              bestMove={bestMove}
-              tmp={tmp}
-              piecesTurn={piecesTurn}
-              setPiecesTurn={setPiecesTurn}
-            />
-            <div style={{ display: "flex" }}>
-              <Chessboard
-                id="CustomSquare"
-                animationDuration={100}
-                boardWidth={700}
-                position={game.fen()}
-                customSquare={CustomSquareRenderer}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              height: 40,
-              border: "1px solid white",
-              marginTop: 10,
-              color: "white",
-            }}
-          >
-            <span style={{ display: "flex" }}>
-              <span style={{ marginRight: 10 }}>
-                {currentPgn ? currentPgn.headers[4].value : "Opponent"}
-              </span>
-              <span>
-                {currentPgn ? `(${currentPgn.headers[13].value})` : ""}
-              </span>
-            </span>
-          </div>
-        </div>
-        <NavBar
-          currentPgn={currentPgn!}
-          game={game}
-          setGame={setGame}
-          setcurrentMoveNumber={setcurrentMoveNumber}
-          currentMoveNumber={currentMoveNumber}
-          setPiecesTurn={setPiecesTurn}
-        />
-      </div>
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <GamesHisory
+        setcurrentPgn={setcurrentPgn}
+        setPiecesTurn={setPiecesTurn}
+      />
+      <MainContent
+        piecesTurn={piecesTurn}
+        currentPgn={currentPgn!}
+        setPiecesTurn={setPiecesTurn}
+      />
     </div>
   );
 }

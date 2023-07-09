@@ -1,21 +1,21 @@
-import { forwardRef, useState } from "react";
+import { CSSProperties, ReactNode, forwardRef, useState } from "react";
 
-const CustomSquareRenderer = forwardRef((props, ref) => {
+interface Props {
+  children: ReactNode;
+  style: CSSProperties;
+}
+type Ref = HTMLDivElement;
+
+const CustomSquareRenderer = forwardRef<Ref, Props>((props, ref) => {
   const { children, style } = props;
   const [clicked, setclicked] = useState(false);
   const [mouseDown, setmouseDown] = useState(false);
-  const st = clicked
-    ? {
-        ...style,
-        position: "relative",
-        backgroundColor: "rgba(203, 5, 2, 0.5)",
-      }
-    : { ...style, position: "relative" };
 
   return (
     <div
       ref={ref}
-      style={st}
+      style={style}
+      className={clicked ? "custom-square--active" : "custom-square"}
       onContextMenu={() => {
         if (mouseDown) {
           setclicked(!clicked);

@@ -1,20 +1,45 @@
-import { useState } from "react";
 import { IconButton } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-
+import { NavButtonsProps } from "../types";
+import capture from "../assets/sounds/capture.mp3";
+import castle from "../assets/sounds/castle.mp3";
+import moveCheck from "../assets/sounds/move-check.mp3";
+import moveSelf from "../assets/sounds/move-self.mp3";
+import promote from "../assets/sounds/promote.mp3";
 function NavButtons({
   game,
   setGame,
+  currentMoveNumber,
   setcurrentMoveNumber,
   currentPgn,
-  currentMoveNumber,
   setPiecesTurn,
-}) {
-  const [btnHover, setBtnHover] = useState(0);
+}: NavButtonsProps) {
+  const makeMoveSound = (curMoveNumber: number) => {
+    if (!currentPgn) return;
+    const playAudio = (audio: string) => {
+      new Audio(audio).play();
+    };
+
+    const moveIs = (moveType: string) =>
+      currentPgn.moves[curMoveNumber].move.includes(moveType);
+
+    // x: capture, O: castle, +: check, #: mate, =: promotion
+    if (moveIs("#") || moveIs("+")) {
+      playAudio(moveCheck);
+    } else if (moveIs("=")) {
+      playAudio(promote);
+    } else if (moveIs("O")) {
+      playAudio(castle);
+    } else if (moveIs("x")) {
+      playAudio(capture);
+    } else {
+      playAudio(moveSelf);
+    }
+  };
 
   return (
     <>
@@ -27,14 +52,10 @@ function NavButtons({
         <span>
           <IconButton
             sx={{
-              color:
-                btnHover === 1
-                  ? "var(--button-hovered)"
-                  : "var(--button-active)",
-              "&:disabled": {
-                color: "var(--button-disabled)",
-              },
+              color: "var(--button-active)",
+              "&:disabled": { color: "var(--button-disabled)" },
             }}
+            className="nav-btn--hovered"
             onClick={() => {
               const gameCopy = { ...game };
               gameCopy.reset();
@@ -44,8 +65,6 @@ function NavButtons({
             disabled={
               currentPgn ? (currentMoveNumber === -1 ? true : false) : true
             }
-            onMouseEnter={() => setBtnHover(1)}
-            onMouseLeave={() => setBtnHover(0)}
           >
             <KeyboardDoubleArrowLeftIcon />
           </IconButton>
@@ -64,25 +83,20 @@ function NavButtons({
         <span>
           <IconButton
             sx={{
-              color:
-                btnHover === 2
-                  ? "var(--button-hovered)"
-                  : "var(--button-active)",
-              "&:disabled": {
-                color: "var(--button-disabled)",
-              },
+              color: "var(--button-active)",
+              "&:disabled": { color: "var(--button-disabled)" },
             }}
+            className="nav-btn--hovered"
             onClick={() => {
               game.undo();
               setGame({ ...game });
               setcurrentMoveNumber((prev) => (prev > -1 ? prev - 1 : prev));
               setPiecesTurn((prev) => (prev === "white" ? "black" : "white"));
+              makeMoveSound(currentMoveNumber);
             }}
             disabled={
               currentPgn ? (currentMoveNumber === -1 ? true : false) : true
             }
-            onMouseEnter={() => setBtnHover(2)}
-            onMouseLeave={() => setBtnHover(0)}
           >
             <NavigateBeforeIcon />
           </IconButton>
@@ -101,20 +115,17 @@ function NavButtons({
         <span>
           <IconButton
             sx={{
-              color:
-                btnHover === 3
-                  ? "var(--button-hovered)"
-                  : "var(--button-active)",
-              "&:disabled": {
-                color: "var(--button-disabled)",
-              },
+              color: "var(--button-active)",
+              "&:disabled": { color: "var(--button-disabled)" },
             }}
+            className="nav-btn--hovered"
             onClick={() => {
               const gameCopy = { ...game };
               gameCopy.move(currentPgn.moves[currentMoveNumber + 1]?.move);
               setGame(gameCopy);
               setcurrentMoveNumber((prev) => prev + 1);
               setPiecesTurn((prev) => (prev === "white" ? "black" : "white"));
+              makeMoveSound(currentMoveNumber + 1);
             }}
             disabled={
               currentPgn
@@ -123,8 +134,6 @@ function NavButtons({
                   : false
                 : true
             }
-            onMouseEnter={() => setBtnHover(3)}
-            onMouseLeave={() => setBtnHover(0)}
           >
             <NavigateNextIcon />
           </IconButton>
@@ -143,20 +152,17 @@ function NavButtons({
         <span>
           <IconButton
             sx={{
-              color:
-                btnHover === 4
-                  ? "var(--button-hovered)"
-                  : "var(--button-active)",
-              "&:disabled": {
-                color: "var(--button-disabled)",
-              },
+              color: "var(--button-active)",
+              "&:disabled": { color: "var(--button-disabled)" },
             }}
+            className="nav-btn--hovered"
             onClick={() => {
               const gameCopy = { ...game };
               gameCopy.reset();
               currentPgn.moves.forEach((item) => gameCopy.move(item.move));
               setGame(gameCopy);
               setcurrentMoveNumber(currentPgn.moves.length - 1);
+              makeMoveSound(currentPgn.moves.length - 1);
             }}
             disabled={
               currentPgn
@@ -165,8 +171,6 @@ function NavButtons({
                   : false
                 : true
             }
-            onMouseEnter={() => setBtnHover(4)}
-            onMouseLeave={() => setBtnHover(0)}
           >
             <KeyboardDoubleArrowRightIcon />
           </IconButton>

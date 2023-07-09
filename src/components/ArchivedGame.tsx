@@ -1,10 +1,9 @@
-import { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
-import rapid from "../assets/rapid.svg";
-import blitz from "../assets/blitz.svg";
-import bullet from "../assets/bullet.svg";
-import custom from "../assets/custom.svg";
-import daily from "../assets/daily.svg";
+import rapid from "../assets/icons/rapid.svg";
+import blitz from "../assets/icons/blitz.svg";
+import bullet from "../assets/icons/bullet.svg";
+import custom from "../assets/icons/custom.svg";
+import daily from "../assets/icons/daily.svg";
 import { ArchivedGameProps } from "../types";
 import {
   ArchivedGameContainer,
@@ -14,6 +13,7 @@ import {
 } from "../styles/archivedGameStyles";
 import GameIcon from "../utils/GameIcon";
 import GameResultSquare from "./GameResultSquare";
+import { GameLink } from "../styles";
 
 const ArchivedGame = ({
   pgn,
@@ -21,9 +21,6 @@ const ArchivedGame = ({
   usersGameData,
   username,
 }: ArchivedGameProps) => {
-  const [isHovered, setisHovered] = useState(false);
-  const whiteResult = usersGameData.white.result;
-  const blackResult = usersGameData.black.result;
   return (
     <ArchivedGameContainer>
       <GameWrap
@@ -64,13 +61,13 @@ const ArchivedGame = ({
             </Tooltip>
             <div>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <WhiteSquare whiteResult={whiteResult} />
+                <WhiteSquare whiteResult={usersGameData.white.result} />
                 <span style={{ fontSize: 16 }}>
                   {usersGameData.white.username}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <BlackSquare blackResult={blackResult} />
+                <BlackSquare blackResult={usersGameData.black.result} />
                 <span style={{ fontSize: 16 }}>
                   {usersGameData.black.username}
                 </span>
@@ -85,19 +82,9 @@ const ArchivedGame = ({
             <div style={{ marginLeft: 30 }}>{pgn.headers![2].value}</div>
           </div>
         </div>
-        <a
-          style={{
-            color: isHovered
-              ? "var(--button-hovered)"
-              : "var(--white-primary-dim)",
-          }}
-          href={usersGameData.url}
-          target="_blank"
-          onMouseEnter={() => setisHovered(true)}
-          onMouseLeave={() => setisHovered(false)}
-        >
+        <GameLink href={usersGameData.url} target="_blank">
           {usersGameData.url}
-        </a>
+        </GameLink>
       </GameWrap>
     </ArchivedGameContainer>
   );

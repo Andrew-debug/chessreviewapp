@@ -1,40 +1,21 @@
 import _ from "lodash";
-import styled from "styled-components";
 // import useFetch from "../utils/useFetch";
 // import ChartComponent from "./ChartComponent";
 import BlackWhiteMove from "./BlackWhiteMove";
 // import FetchComponent from "./FetchComponent";
 import NavButtons from "./NavButtons";
 import { NavBarProps, PieceMove } from "../types";
-export const Container = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 420px;
-  height: 100vh;
-  background-color: var(--black-primary);
-  max-width: 550px;
-  max-height: 800px;
-`;
-const HorizontalMoveList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  min-width: 230px;
-  max-height: 500px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 10px 15px;
-  font-size: 14px;
-`;
+import { useGetPositionData } from "../utils/useGetPositionData";
+import { Container, HorizontalMoveList } from "../styles";
 
-function NavBar({
+const NavBar = ({
   currentPgn,
   game,
   setGame,
   setcurrentMoveNumber,
   currentMoveNumber,
   setPiecesTurn,
-}: NavBarProps) {
+}: NavBarProps) => {
   const whiteMoves: PieceMove[] = [];
   const blackMoves: PieceMove[] = [];
   if (currentPgn) {
@@ -58,34 +39,35 @@ function NavBar({
   //       })
   //   );
   // }, [currentPgn]);
-
+  const { bestMove, positionEval } = useGetPositionData();
   return (
-    <Container>
-      {/* <div style={{ margin: 10 }}>
+    <nav>
+      <Container>
+        {/* <div style={{ margin: 10 }}>
         <ChartComponent gameReviewData={useGamesFetch.data} />
       </div> */}
-      {/* <PossibleEngineMoves /> */}
-      <HorizontalMoveList>
-        {allMoves.map(([wm, bm], index) => {
-          return (
-            <div key={index} style={{ display: "flex" }}>
-              <BlackWhiteMove
-                // gameReviewData={useGamesFetch.data}
-                wm={wm!}
-                bm={bm!}
-                game={game}
-                index={index}
-                currentPgn={currentPgn}
-                setGame={setGame}
-                setcurrentMoveNumber={setcurrentMoveNumber}
-                currentMoveNumber={currentMoveNumber}
-              />
-            </div>
-          );
-        })}
-      </HorizontalMoveList>
-      {/* <ReviewMsg /> */}
-      {/* <FetchComponent useFetchStates={useGamesFetch} DataVisualisation={null}>
+        {/* <PossibleEngineMoves /> */}
+        <HorizontalMoveList>
+          {allMoves.map(([wm, bm], index) => {
+            return (
+              <div key={index} style={{ display: "flex" }}>
+                <BlackWhiteMove
+                  // gameReviewData={useGamesFetch.data}
+                  wm={wm!}
+                  bm={bm!}
+                  game={game}
+                  index={index}
+                  currentPgn={currentPgn}
+                  setGame={setGame}
+                  setcurrentMoveNumber={setcurrentMoveNumber}
+                  currentMoveNumber={currentMoveNumber}
+                />
+              </div>
+            );
+          })}
+        </HorizontalMoveList>
+        {/* <ReviewMsg /> */}
+        {/* <FetchComponent useFetchStates={useGamesFetch} DataVisualisation={null}>
         <button
           onClick={useGamesFetch.fetchDataAction}
           disabled={currentPgn ? false : true}
@@ -94,18 +76,26 @@ function NavBar({
         </button>
       </FetchComponent> */}
 
-      <div style={{ position: "absolute", bottom: 0 }}>
-        <NavButtons
-          game={game}
-          setGame={setGame}
-          setcurrentMoveNumber={setcurrentMoveNumber}
-          currentPgn={currentPgn}
-          currentMoveNumber={currentMoveNumber}
-          setPiecesTurn={setPiecesTurn}
-        />
-      </div>
-    </Container>
+        <div>
+          <h3 style={{ color: "white" }}>Best move: {bestMove}</h3>
+          <h3 style={{ color: "white" }}>
+            evaluation bar numbers: {positionEval}
+          </h3>
+        </div>
+
+        <div style={{ position: "absolute", bottom: 0 }}>
+          <NavButtons
+            game={game}
+            setGame={setGame}
+            currentMoveNumber={currentMoveNumber}
+            setcurrentMoveNumber={setcurrentMoveNumber}
+            currentPgn={currentPgn}
+            setPiecesTurn={setPiecesTurn}
+          />
+        </div>
+      </Container>
+    </nav>
   );
-}
+};
 
 export default NavBar;

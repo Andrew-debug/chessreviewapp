@@ -48,3 +48,16 @@ body {
 ::-webkit-scrollbar-thumb {
   background-color: rgb(22, 20, 19);
 }
+
+.nav-btn--hovered:hover {
+  color: var(--button-hovered);
+}
+
+.custom-square--active {
+  position: relative;
+  background-color: rgba(203, 5, 2, 0.5);
+}
+.custom-square {
+  position: relative;
+  background-color: inherit;
+}
