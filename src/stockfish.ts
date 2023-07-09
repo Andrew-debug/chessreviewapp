@@ -1,9 +1,13 @@
 import { config } from "../package.json";
 import debounce from "lodash.debounce";
 import { stockfishResultsUpdated } from "./stockfishEvents.ts";
-import { worker } from "./stockfishBlob.ts";
+
+let fishPath = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ?
+  "node_modules/stockfish/src/stockfish.js" :
+  "/chessreviewapp/stockfish.js"
+
 // init stockfish
-const stockfish = worker;
+const stockfish = new Worker(fishPath);
 
 const stockfish_results = {
   bestMove: undefined,
@@ -18,8 +22,7 @@ const stPost = (command: string) => {
 };
 stPost("uci");
 stPost(
-  `setoption name Threads value ${
-    (window.navigator.hardwareConcurrency || 2) - 1
+  `setoption name Threads value ${(window.navigator.hardwareConcurrency || 2) - 1
   }`
 );
 stPost("setoption name Hash value 512");
