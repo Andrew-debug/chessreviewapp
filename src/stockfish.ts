@@ -1,11 +1,9 @@
 import { config } from "../package.json";
 import debounce from "lodash.debounce";
 import { stockfishResultsUpdated } from "./stockfishEvents.ts";
-
+import { worker } from "./stockfishBlob.ts";
 // init stockfish
-const stockfish = new Worker("node_modules/stockfish/src/stockfish.js", {
-  type: "module",
-});
+const stockfish = worker;
 
 const stockfish_results = {
   bestMove: undefined,
@@ -15,7 +13,7 @@ const notifyFront = () => {
   globalThis.dispatchEvent(stockfishResultsUpdated);
 };
 const stPost = (command: string) => {
-  // console.log("SEND :::: ", command);
+  console.log("SEND :::: ", command);
   stockfish.postMessage(command);
 };
 stPost("uci");
@@ -46,7 +44,7 @@ export const stockfishInterface = {
 // main message handler
 stockfish.onmessage = (event: any) => {
   if (config.talkative_fish) {
-    // console.log("SF ::: ", event.data);
+    console.log("SF ::: ", event.data);
   }
   let dataChanged = false;
   const engine_analisys_regex = event.data.match(/\s.* cp (-?\d+).* pv (.+)/);

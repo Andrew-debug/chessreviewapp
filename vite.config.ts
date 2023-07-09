@@ -12,4 +12,11 @@ export default defineConfig({
   },
   base: "/chessreviewapp",
   plugins: [react()],
+  preview: {
+    headers: {
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp",
+    },
+    cors: true,
+  },
 });
