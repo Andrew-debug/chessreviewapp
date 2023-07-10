@@ -4,7 +4,6 @@
   font-weight: 400;
 
   --black-primary: rgb(39, 37, 34);
-  --gray: rgb(86, 83, 82);
   --white-primary: rgb(245, 245, 248);
   --white-primary-dim: rgba(245, 245, 248, 0.9);
   --button-active: rgb(245, 245, 248, 0.6);
@@ -12,11 +11,12 @@
   --button-hovered: rgb(255, 255, 255);
   --red: rgb(207, 72, 70);
   --green: rgb(150, 188, 75);
+  --gray: rgb(86, 83, 82);
   --silver: rgb(195, 194, 193);
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--white-primary);
+  background-color: rgb(49, 46, 43);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

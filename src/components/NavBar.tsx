@@ -61,6 +61,7 @@ const NavBar = ({
                   setGame={setGame}
                   setcurrentMoveNumber={setcurrentMoveNumber}
                   currentMoveNumber={currentMoveNumber}
+                  setPiecesTurn={setPiecesTurn}
                 />
               </div>
             );
@@ -78,9 +79,9 @@ const NavBar = ({
 
         <div>
           <h3 style={{ color: "white" }}>Best move: {bestMove}</h3>
-          <h3 style={{ color: "white" }}>
+          {/* <h3 style={{ color: "white" }}>
             evaluation bar numbers: {positionEval}
-          </h3>
+          </h3> */}
         </div>
 
         <div style={{ position: "absolute", bottom: 0 }}>
@@ -90,7 +91,7 @@ const NavBar = ({
             currentMoveNumber={currentMoveNumber}
             setcurrentMoveNumber={setcurrentMoveNumber}
             currentPgn={currentPgn}
-            setPiecesTurn={setPiecesTurn}
+            setPiecesTurn={setPiecesTurn} //TODO: remove it
           />
         </div>
       </Container>
