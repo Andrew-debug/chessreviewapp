@@ -39,7 +39,10 @@ const NavBar = ({
   //       })
   //   );
   // }, [currentPgn]);
-  const { bestMove, positionEval } = useGetPositionData();
+  const {
+    bestMove,
+    // positionEval
+  } = useGetPositionData();
   return (
     <nav>
       <Container>
