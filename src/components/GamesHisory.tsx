@@ -15,7 +15,7 @@ function GamesHisory({
   setcurrentPgn: (pgn: IPgn) => void;
   setPiecesTurn: (pieceTurn: string) => void;
 }) {
-  const [username, setUsername] = useState("kaarelen");
+  const [username, setUsername] = useState("GothamChess");
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth() + 1);
   const [year, setYear] = useState(date.getFullYear());
@@ -69,7 +69,7 @@ function GamesHisory({
               </button>
               {useGamesFetch.data?.games ? (
                 useGamesFetch.data.games.length === 0 ? (
-                  <div>no games</div>
+                  <div>no games this month</div>
                 ) : (
                   [...useGamesFetch.data.games]
                     .reverse()

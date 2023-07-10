@@ -4,6 +4,7 @@ import {
   // PieceMove
 } from "../types";
 
+// TODO: add sounds on buttons
 function BlackWhiteMove({
   wm,
   bm,
