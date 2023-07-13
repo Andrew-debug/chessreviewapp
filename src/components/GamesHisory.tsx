@@ -96,6 +96,10 @@ function GamesHisory({
           }
         >
           <InputWrap>
+            <div style={{ color: "var(--white-primary)" }}>
+              Use Chess.com username
+            </div>
+            <input value={username} onChange={handleUsernameChange} />
             <div style={{ color: "var(--white-primary)" }}>Month</div>
             <input
               type="text"
@@ -108,10 +112,6 @@ function GamesHisory({
               value={year}
               onChange={(e) => setYear(+e.target.value)}
             />
-            <div style={{ color: "var(--white-primary)" }}>
-              Use Chess.com username
-            </div>
-            <input value={username} onChange={handleUsernameChange} />
             <button onClick={useGamesFetch.fetchDataAction}>Search</button>
           </InputWrap>
         </FetchComponent>

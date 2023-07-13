@@ -2,14 +2,10 @@ import { config } from "../package.json";
 import debounce from "lodash.debounce";
 import { stockfishResultsUpdated } from "./stockfishEvents.ts";
 
-// let fishPath =
-//   !process.env.NODE_ENV || process.env.NODE_ENV === "development"
-//     ? "node_modules/stockfish/src/stockfish.js"
-//     : "/chessreviewapp/stockfish.js";
 let fishPath =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development"
     ? "node_modules/stockfish/src/stockfish.js"
-    : "/stockfish.js";
+    : "/chessreviewapp/stockfish.js";
 
 // init stockfish
 const stockfish = new Worker(fishPath);

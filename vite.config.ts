@@ -10,6 +10,6 @@ export default defineConfig({
     },
     cors: true,
   },
-  // base: "/chessreviewapp",
+  base: "/chessreviewapp",
   plugins: [react()],
 });
