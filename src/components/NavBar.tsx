@@ -43,6 +43,7 @@ const NavBar = ({
     bestMove,
     // positionEval
   } = useGetPositionData();
+
   return (
     <nav>
       <Container>

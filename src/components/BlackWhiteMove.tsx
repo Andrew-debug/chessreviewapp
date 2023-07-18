@@ -3,8 +3,12 @@ import {
   BlackWhiteMoveProps,
   // PieceMove
 } from "../types";
-
-// TODO: add sounds on buttons
+import capture from "../assets/sounds/capture.mp3";
+import castle from "../assets/sounds/castle.mp3";
+import moveCheck from "../assets/sounds/move-check.mp3";
+import moveSelf from "../assets/sounds/move-self.mp3";
+import promote from "../assets/sounds/promote.mp3";
+// TODO: refactor sounds fn
 function BlackWhiteMove({
   wm,
   bm,
@@ -61,6 +65,30 @@ function BlackWhiteMove({
   //   white_color = "white";
   //   black_color = "white";
   // }
+
+  const makeMoveSound = (curMoveNumber: number) => {
+    if (!currentPgn) return;
+    const playAudio = (audio: string) => {
+      new Audio(audio).play();
+    };
+
+    const moveIs = (moveType: string) =>
+      currentPgn.moves[curMoveNumber].move.includes(moveType);
+
+    // x: capture, O: castle, +: check, #: mate, =: promotion
+    if (moveIs("#") || moveIs("+")) {
+      playAudio(moveCheck);
+    } else if (moveIs("=")) {
+      playAudio(promote);
+    } else if (moveIs("O")) {
+      playAudio(castle);
+    } else if (moveIs("x")) {
+      playAudio(capture);
+    } else {
+      playAudio(moveSelf);
+    }
+  };
+
   return (
     <>
       <div
@@ -77,14 +105,14 @@ function BlackWhiteMove({
         currentMoveNumber={currentMoveNumber}
         index={index}
         onClick={() => {
-          const gameCopy = { ...game };
-          gameCopy.reset();
+          game.reset();
           currentPgn.moves
             .slice(0, index * 2 + 1)
-            .forEach((item) => gameCopy.move(item.move));
-          setGame(gameCopy);
+            .forEach((item) => game.move(item.move));
+          setGame({ ...game });
           setcurrentMoveNumber(index * 2);
           setPiecesTurn("black");
+          makeMoveSound(currentMoveNumber + 1);
         }}
       >
         {wm?.move}
@@ -94,14 +122,14 @@ function BlackWhiteMove({
         currentMoveNumber={currentMoveNumber}
         index={index}
         onClick={() => {
-          const gameCopy = { ...game };
-          gameCopy.reset();
+          game.reset();
           currentPgn.moves
             .slice(0, index * 2 + 2) // they come in pairs, black is 2nd (odd)
-            .forEach((item) => gameCopy.move(item.move));
-          setGame(gameCopy);
+            .forEach((item) => game.move(item.move));
+          setGame({ ...game });
           setcurrentMoveNumber(index * 2 + 1);
           setPiecesTurn("white");
+          makeMoveSound(currentMoveNumber + 1);
         }}
       >
         {bm?.move}

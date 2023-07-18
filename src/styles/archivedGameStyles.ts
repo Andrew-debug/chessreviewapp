@@ -6,6 +6,7 @@ export const ArchivedGameContainer = styled.div`
 `;
 
 export const GameWrap = styled.div`
+  position: relative;
   margin: 10px;
   cursor: pointer;
   border: 1px solid var(--gray);
@@ -81,5 +82,24 @@ export const DrawComponent = styled.div`
     font-size: 20px;
     font-weight: 600;
     transform: translateY(5px);
+  }
+`;
+
+export const Unsupported = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--white-primary);
+  opacity: 0.9;
+  cursor: default;
+  p {
+    color: var(--black-primary);
+    font-size: 24px;
+    cursor: default;
   }
 `;

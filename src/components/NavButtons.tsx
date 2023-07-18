@@ -57,9 +57,8 @@ function NavButtons({
             }}
             className="nav-btn--hovered"
             onClick={() => {
-              const gameCopy = { ...game };
-              gameCopy.reset();
-              setGame(gameCopy);
+              game.reset();
+              setGame({ ...game });
               setcurrentMoveNumber(-1);
             }}
             disabled={
