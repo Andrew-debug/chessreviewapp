@@ -1,15 +1,16 @@
 import { ISections } from "../types";
 import { Section } from "../styles/GameHistoryStyles";
-import { useContext } from "react";
-import { SectionContext } from "./GamesHisory";
 const SectionButton = ({
+  sections,
+  setSections,
   text,
   name,
 }: {
+  sections: ISections;
+  setSections: (v: ISections) => void;
   text: string;
   name: keyof ISections;
 }) => {
-  const { sections, setSections } = useContext(SectionContext);
   const resetSections = {
     byUsername: false,
     byDate: false,

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const ArchivedGameContainer = styled.div`
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   background-color: var(--black-primary);
   color: var(--white-primary);
 `;

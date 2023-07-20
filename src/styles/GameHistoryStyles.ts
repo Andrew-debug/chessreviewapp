@@ -42,6 +42,5 @@ export const Section = styled.button<ISectionStyles>`
   color: ${({ sections, name }) =>
     sections[name] ? "var(--white-primary)" : "var(--button-active)"};
   font-weight: ${({ sections, name }) => (sections[name] ? 500 : 400)};
-
   font-size: 14px;
 `;

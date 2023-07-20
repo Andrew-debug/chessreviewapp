@@ -1,13 +1,11 @@
-import { IPgn, ISectionContext } from "../types";
+import { IPgn } from "../types";
 //
 import { Container } from "../styles";
 import FetchGamesByUsername from "./FetchGamesByUsername";
 import FetchGamesByDate from "./FetchGamesByDate";
 import FetchGameByLink from "./FetchGameByLink";
-import { createContext, useState } from "react";
+import { useState } from "react";
 import SectionButton from "./SectionButton";
-
-export const SectionContext = createContext<ISectionContext>(null!);
 
 function GamesHisory({
   setcurrentPgn,
@@ -22,20 +20,38 @@ function GamesHisory({
     byDate: false,
     byLink: false,
   });
+
+  const [isGamesFetched, setIsGamesFetched] = useState(false);
   return (
     <header>
       <Container>
-        <SectionContext.Provider value={{ sections, setSections }}>
+        {!isGamesFetched && (
           <div style={{ display: "flex" }}>
-            <SectionButton text="Username search" name="byUsername" />
-            <SectionButton text="Date search" name="byDate" />
-            <SectionButton text="Link search" name="byLink" />
+            <SectionButton
+              sections={sections}
+              setSections={setSections}
+              text="Username search"
+              name="byUsername"
+            />
+            <SectionButton
+              sections={sections}
+              setSections={setSections}
+              text="Date search"
+              name="byDate"
+            />
+            <SectionButton
+              sections={sections}
+              setSections={setSections}
+              text="Link search"
+              name="byLink"
+            />
           </div>
-        </SectionContext.Provider>
+        )}
         {sections.byUsername && (
           <FetchGamesByUsername
             setcurrentPgn={setcurrentPgn}
             setPiecesTurn={setPiecesTurn}
+            setIsGamesFetched={setIsGamesFetched}
           />
         )}
         {sections.byDate && (

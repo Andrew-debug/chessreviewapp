@@ -49,8 +49,28 @@ export const HorizontalMoveList = styled.div`
   flex-wrap: wrap;
   min-width: 230px;
   max-height: 500px;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 10px 15px;
   font-size: 14px;
+`;
+
+export const ReturnButton = styled.div`
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--green-dark);
+  border-top: none;
+  border-left: none;
+  flex-basis: 33.33%;
+  width: 33.33%;
+  padding: 8px 0 10px;
+  box-shadow: 0px 2px 1px var(--green-dark);
+  background-color: var(--green);
+  color: var(--white-primary);
+  font-weight: 500;
+  font-size: 14px;
+  margin: 10px 5px 10px;
 `;

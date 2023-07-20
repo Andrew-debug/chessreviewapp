@@ -3,7 +3,12 @@ import FetchComponent from "./FetchComponent";
 import { GamesContainer, InputWrap } from "../styles/GameHistoryStyles";
 import ArchivedGame from "./ArchivedGame";
 import pgnParser from "pgn-parser";
-const FetchGamesByUsername = ({ setcurrentPgn, setPiecesTurn }) => {
+import { ReturnButton } from "../styles";
+const FetchGamesByUsername = ({
+  setcurrentPgn,
+  setPiecesTurn,
+  setIsGamesFetched,
+}) => {
   const username = useRef("kaarelen");
   const [allMonth, setAllMonth] = useState([]);
   const [data, setData] = useState({});
@@ -22,6 +27,7 @@ const FetchGamesByUsername = ({ setcurrentPgn, setPiecesTurn }) => {
         const result = await response.json();
         const curGameDate = lastMonth.slice(-7);
         setData({ ...data, [curGameDate]: result.games });
+        setIsGamesFetched(true);
         gamesReceived += result.games.length;
         if (gamesReceived >= desiredGamesNum) break;
       } catch (error: any) {
@@ -58,19 +64,28 @@ const FetchGamesByUsername = ({ setcurrentPgn, setPiecesTurn }) => {
         useFetchStates={{ data, isLoading, error }}
         DataVisualisation={
           <GamesContainer>
-            <button
+            <ReturnButton
               onClick={() => {
                 setPiecesTurn("white"); //TODO: if user presses the button, the pgn of the game stays, if he keeps scrolling moves, evalbar will be incorrect
                 setData({});
+                setIsGamesFetched(false);
               }}
             >
-              {"<="}
-            </button>
+              Return
+            </ReturnButton>
             {Object.keys(data).length !== 0 &&
               Object.entries(data).map(([month, games], monthIndex) => {
                 return (
                   <div key={monthIndex}>
-                    <div>{month}</div>
+                    <div
+                      style={{
+                        width: "50%",
+                        borderBottom: "1px solid var(--silver)",
+                        marginLeft: 10,
+                      }}
+                    >
+                      {month}
+                    </div>
                     {[...games].reverse().map((usersGameData, index) => {
                       const pgn = pgnParser.parse(usersGameData.pgn)[0];
                       pgn.rawPgn = usersGameData.pgn;
