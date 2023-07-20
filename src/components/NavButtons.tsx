@@ -5,11 +5,7 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { NavButtonsProps } from "../types";
-import capture from "../assets/sounds/capture.mp3";
-import castle from "../assets/sounds/castle.mp3";
-import moveCheck from "../assets/sounds/move-check.mp3";
-import moveSelf from "../assets/sounds/move-self.mp3";
-import promote from "../assets/sounds/promote.mp3";
+
 function NavButtons({
   game,
   setGame,
@@ -18,29 +14,6 @@ function NavButtons({
   currentPgn,
   setPiecesTurn,
 }: NavButtonsProps) {
-  const makeMoveSound = (curMoveNumber: number) => {
-    if (!currentPgn) return;
-    const playAudio = (audio: string) => {
-      new Audio(audio).play();
-    };
-
-    const moveIs = (moveType: string) =>
-      currentPgn.moves[curMoveNumber].move.includes(moveType);
-
-    // x: capture, O: castle, +: check, #: mate, =: promotion
-    if (moveIs("#") || moveIs("+")) {
-      playAudio(moveCheck);
-    } else if (moveIs("=")) {
-      playAudio(promote);
-    } else if (moveIs("O")) {
-      playAudio(castle);
-    } else if (moveIs("x")) {
-      playAudio(capture);
-    } else {
-      playAudio(moveSelf);
-    }
-  };
-
   return (
     <>
       <Tooltip
@@ -89,9 +62,8 @@ function NavButtons({
             onClick={() => {
               game.undo();
               setGame({ ...game });
-              setcurrentMoveNumber((prev) => (prev > -1 ? prev - 1 : prev));
+              setcurrentMoveNumber((prev) => (prev > -1 ? (prev -= 1) : prev));
               setPiecesTurn((prev) => (prev === "white" ? "black" : "white"));
-              makeMoveSound(currentMoveNumber);
             }}
             disabled={
               currentPgn ? (currentMoveNumber === -1 ? true : false) : true
@@ -119,12 +91,10 @@ function NavButtons({
             }}
             className="nav-btn--hovered"
             onClick={() => {
-              const gameCopy = { ...game };
-              gameCopy.move(currentPgn.moves[currentMoveNumber + 1]?.move);
-              setGame(gameCopy);
-              setcurrentMoveNumber((prev) => prev + 1);
+              game.move(currentPgn.moves[currentMoveNumber + 1]?.move);
+              setGame({ ...game });
+              setcurrentMoveNumber((prev) => (prev += 1));
               setPiecesTurn((prev) => (prev === "white" ? "black" : "white"));
-              makeMoveSound(currentMoveNumber + 1);
             }}
             disabled={
               currentPgn
@@ -161,7 +131,6 @@ function NavButtons({
               currentPgn.moves.forEach((item) => gameCopy.move(item.move));
               setGame(gameCopy);
               setcurrentMoveNumber(currentPgn.moves.length - 1);
-              makeMoveSound(currentPgn.moves.length - 1);
             }}
             disabled={
               currentPgn

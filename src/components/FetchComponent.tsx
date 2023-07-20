@@ -8,6 +8,7 @@ const FetchComponent = ({
   CustomErrorRenderer,
 }: FetchComponentProps) => {
   const { data, isLoading, error } = useFetchStates;
+  const dataType = Array.isArray(data) ? data : Object.keys(data).length !== 0;
   if (isLoading) {
     return <Loader />;
   }
@@ -17,12 +18,13 @@ const FetchComponent = ({
     }
     return "error";
   }
-  if (data && DataVisualisation === null) {
+  if (dataType && DataVisualisation === null) {
     return null;
   }
-  if (data && DataVisualisation !== undefined) {
+  if (dataType && DataVisualisation !== undefined) {
     return DataVisualisation;
   }
+
   return children;
 };
 

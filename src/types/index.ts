@@ -31,7 +31,7 @@ export interface ArchivedGameProps {
   pgn: ParsedPGN;
   setcurrentPgn: (pgn: ParsedPGN) => void;
   usersGameData: UsersGameData;
-  username: string;
+  username: { current: string };
 }
 
 export interface PieceMove {
@@ -86,4 +86,14 @@ export interface NavButtonsProps {
   setcurrentMoveNumber: Dispatcher<number>;
   currentPgn: IPgn;
   setPiecesTurn: Dispatcher<string>;
+}
+
+export interface ISections {
+  byUsername: boolean;
+  byDate: boolean;
+  byLink: boolean;
+}
+export interface ISectionContext {
+  sections: ISections;
+  setSections: (v: ISections) => void;
 }

@@ -1,6 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
 
   --black-primary: rgb(39, 37, 34);
@@ -10,7 +9,8 @@
   --button-disabled: rgba(245, 245, 248, 0.3);
   --button-hovered: rgb(255, 255, 255);
   --red: rgb(207, 72, 70);
-  --green: rgb(150, 188, 75);
+  --green: #81b64c;
+  --green-dark: #45753c;
   --gray: rgb(86, 83, 82);
   --silver: rgb(195, 194, 193);
 

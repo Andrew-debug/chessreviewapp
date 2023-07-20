@@ -1,12 +1,12 @@
 import _ from "lodash";
 // import useFetch from "../utils/useFetch";
 // import ChartComponent from "./ChartComponent";
-import BlackWhiteMove from "./BlackWhiteMove";
 // import FetchComponent from "./FetchComponent";
 import NavButtons from "./NavButtons";
 import { NavBarProps, PieceMove } from "../types";
 import { useGetPositionData } from "../utils/useGetPositionData";
 import { Container, HorizontalMoveList } from "../styles";
+import { Move, MoveWrap, Turn } from "../styles/blackWhiteMoveStyles";
 
 const NavBar = ({
   currentPgn,
@@ -16,18 +16,50 @@ const NavBar = ({
   currentMoveNumber,
   setPiecesTurn,
 }: NavBarProps) => {
-  const whiteMoves: PieceMove[] = [];
-  const blackMoves: PieceMove[] = [];
-  if (currentPgn) {
-    currentPgn.moves.map((item, index) => {
-      if (index % 2 === 0) {
-        whiteMoves.push(item);
-      } else {
-        blackMoves.push(item);
-      }
-    });
-  }
-  const allMoves = _.zip(whiteMoves, blackMoves);
+  // let white_color;
+  // let black_color;
+  // if (gameReviewData) {
+  //   const white_moves_review = gameReviewData.all_moves.filter(
+  //     (_: any, index: number) => index % 2 === 0
+  //   );
+  //   const black_moves_review = gameReviewData.all_moves.filter(
+  //     (_: any, index: number) => index % 2 !== 0
+  //   );
+  //   const white_scorr_diff =
+  //     white_moves_review[index]?.score -
+  //     (black_moves_review[index - 1]
+  //       ? black_moves_review[index - 1].score
+  //       : 33);
+
+  //   const black_scorr_diff = black_moves_review[index]
+  //     ? black_moves_review[index].score - white_moves_review[index]?.score
+  //     : 0;
+
+  //   function evalDiffToColor(evalDiff) {
+  //     if (evalDiff < 10 && evalDiff > -10) {
+  //       return "white";
+  //     } else {
+  //       if (evalDiff > 0) {
+  //         if (evalDiff > 40) {
+  //           return "blue";
+  //         } else {
+  //           return "green";
+  //         }
+  //       } else {
+  //         if (evalDiff > -40) {
+  //           return "pink";
+  //         } else {
+  //           return "red";
+  //         }
+  //       }
+  //     }
+  //   }
+  //   white_color = evalDiffToColor(white_scorr_diff);
+  //   black_color = evalDiffToColor(-black_scorr_diff);
+  // } else {
+  //   white_color = "white";
+  //   black_color = "white";
+  // }
 
   // const useGamesFetch = useFetch();
   // useEffect(() => {
@@ -39,6 +71,7 @@ const NavBar = ({
   //       })
   //   );
   // }, [currentPgn]);
+
   const {
     bestMove,
     // positionEval
@@ -52,22 +85,26 @@ const NavBar = ({
       </div> */}
         {/* <PossibleEngineMoves /> */}
         <HorizontalMoveList>
-          {allMoves.map(([wm, bm], index) => {
+          {currentPgn?.moves.map((move, index) => {
             return (
-              <div key={index} style={{ display: "flex" }}>
-                <BlackWhiteMove
-                  // gameReviewData={useGamesFetch.data}
-                  wm={wm!}
-                  bm={bm!}
-                  game={game}
-                  index={index}
-                  currentPgn={currentPgn}
-                  setGame={setGame}
-                  setcurrentMoveNumber={setcurrentMoveNumber}
+              <MoveWrap key={index}>
+                {index % 2 === 0 && <Turn>{move.move_number}</Turn>}
+                <Move
                   currentMoveNumber={currentMoveNumber}
-                  setPiecesTurn={setPiecesTurn}
-                />
-              </div>
+                  index={index}
+                  onClick={() => {
+                    game.reset();
+                    currentPgn.moves
+                      .slice(0, index)
+                      .forEach((item) => game.move(item.move));
+                    setGame({ ...game });
+                    setcurrentMoveNumber(index);
+                    setPiecesTurn(index % 2 === 0 ? "white" : "black");
+                  }}
+                >
+                  {move.move}
+                </Move>
+              </MoveWrap>
             );
           })}
         </HorizontalMoveList>

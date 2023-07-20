@@ -10,10 +10,9 @@ const GameResultSquare = ({
   username,
 }: {
   usersGameData: UsersGameData;
-  username: string;
+  username: { current: string };
 }) => {
-  const lowerCurrentUsername = String(username).toLowerCase();
-
+  const lowerCurrentUsername = `${username.current.toLowerCase()}`;
   const [userResult, oponentResult] = {
     [String(usersGameData.white.username).toLowerCase()]: [
       usersGameData.white.result,
@@ -24,6 +23,7 @@ const GameResultSquare = ({
       usersGameData.white.result,
     ],
   }[lowerCurrentUsername];
+
   if (userResult === "win") {
     return (
       <WinComponent>

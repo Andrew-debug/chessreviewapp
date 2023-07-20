@@ -4,6 +4,11 @@ import { Chess } from "chess.js";
 import { stockfishInterface } from "../stockfish.ts";
 //@ts-expect-error
 import { Pgn } from "cm-pgn/src/Pgn.js";
+import capture from "../assets/sounds/capture.mp3";
+import castle from "../assets/sounds/castle.mp3";
+import moveCheck from "../assets/sounds/move-check.mp3";
+import moveSelf from "../assets/sounds/move-self.mp3";
+import promote from "../assets/sounds/promote.mp3";
 //
 import NavBar from "./NavBar.tsx";
 import EvalBar from "./EvalBar.tsx";
@@ -24,10 +29,34 @@ const MainContent = ({
     setcurrentMoveNumber(-1);
   }, [currentPgn]);
 
+  // useEffect(() => {
+  //   const pgn = new Pgn(game.pgn());
+  //   const uci_moves = pgn.history.moves.map((val: { uci: string }) => val.uci);
+  //   stockfishInterface.setPosition(uci_moves.join(" "));
+  // }, [currentMoveNumber]);
+
+  // the reaseon why i put it onclick is that to controll backward moves
   useEffect(() => {
-    const pgn = new Pgn(game.pgn());
-    const uci_moves = pgn.history.moves.map((val: { uci: string }) => val.uci);
-    stockfishInterface.setPosition(uci_moves.join(" "));
+    if (currentMoveNumber === -1) return;
+
+    const playAudio = (audio: string) => {
+      new Audio(audio).play();
+    };
+    const moveIs = (moveType: string) =>
+      currentPgn.moves[currentMoveNumber].move.includes(moveType);
+
+    // x: capture, O: castle, +: check, #: mate, =: promotion
+    if (moveIs("#") || moveIs("+")) {
+      playAudio(moveCheck);
+    } else if (moveIs("=")) {
+      playAudio(promote);
+    } else if (moveIs("O")) {
+      playAudio(castle);
+    } else if (moveIs("x")) {
+      playAudio(capture);
+    } else {
+      playAudio(moveSelf);
+    }
   }, [currentMoveNumber]);
 
   return (
