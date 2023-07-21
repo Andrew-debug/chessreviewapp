@@ -4,6 +4,8 @@ import { GamesContainer, InputWrap } from "../styles/GameHistoryStyles";
 import ArchivedGame from "./ArchivedGame";
 import pgnParser from "pgn-parser";
 import { ReturnButton } from "../styles";
+import CustomError from "../utils/CustomError";
+
 const FetchGamesByUsername = ({
   setcurrentPgn,
   setPiecesTurn,
@@ -11,12 +13,12 @@ const FetchGamesByUsername = ({
 }) => {
   const username = useRef("kaarelen");
   const [allMonth, setAllMonth] = useState([]);
-  const [data, setData] = useState({});
+  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
 
   const fetchLastGames = async (allMonths, desiredGamesNum) => {
-    const allMonthLength = allMonths.length;
+    const allMonthLength = allMonths?.length;
     let gamesReceived = 0;
 
     for (let index = 0; index < allMonthLength; index++) {
@@ -36,7 +38,9 @@ const FetchGamesByUsername = ({
         setIsLoading(false);
       }
     }
-    setAllMonth([...allMonths]);
+    if (allMonths) {
+      setAllMonth([...allMonths]);
+    }
   };
 
   const infiniteScrollRange = 20;
@@ -52,8 +56,9 @@ const FetchGamesByUsername = ({
         `https://api.chess.com/pub/player/${username.current}/games/archives`
       );
       const result = await response.json();
-      if (result.archives) return result.archives;
-      if (result.code === 0) return "wrong username";
+      if (result.archives.length === 0) setError("no games");
+      if (result.code === 0) setError("wrong username");
+      if (result.archives.length !== 0) return result.archives;
     } catch (error) {
       console.log("something wrong");
     }
@@ -67,13 +72,13 @@ const FetchGamesByUsername = ({
             <ReturnButton
               onClick={() => {
                 setPiecesTurn("white"); //TODO: if user presses the button, the pgn of the game stays, if he keeps scrolling moves, evalbar will be incorrect
-                setData({});
+                setData(null);
                 setIsGamesFetched(false);
               }}
             >
               Return
             </ReturnButton>
-            {Object.keys(data).length !== 0 &&
+            {data &&
               Object.entries(data).map(([month, games], monthIndex) => {
                 return (
                   <div key={monthIndex}>
@@ -103,6 +108,14 @@ const FetchGamesByUsername = ({
                 );
               })}
           </GamesContainer>
+        }
+        CustomErrorRenderer={
+          <CustomError
+            error={error}
+            setData={setData}
+            setIsGamesFetched={setIsGamesFetched}
+            setError={setError}
+          />
         }
       >
         <InputWrap>

@@ -15,7 +15,7 @@ const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
     username.current
   }/games/${year}/${month < 10 ? "0" + month : month}`;
 
-  const useGamesFetch = useFetch("");
+  const useGamesFetch = useFetch(url);
   return (
     <>
       <FetchComponent

@@ -63,9 +63,12 @@ export interface NavBarProps {
 export interface FetchComponentProps {
   children: ReactNode;
   useFetchStates: {
-    data: {
-      games: UsersGameData[];
-    } | null;
+    data:
+      | {
+          games: UsersGameData[];
+        }
+      | { [key: string]: { games: UsersGameData[] } }
+      | null;
     isLoading: boolean;
     error: any;
   };

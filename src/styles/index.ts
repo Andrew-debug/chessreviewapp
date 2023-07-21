@@ -18,6 +18,7 @@ export const GameLink = styled.a`
   }
 `;
 export const Bar = styled.div`
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   position: relative;
   width: 26px;
   background-color: var(--black-primary);
@@ -73,4 +74,19 @@ export const ReturnButton = styled.div`
   font-weight: 500;
   font-size: 14px;
   margin: 10px 5px 10px;
+`;
+
+export const LoaderWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const CustomErrorStyles = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
