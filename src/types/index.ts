@@ -3,7 +3,7 @@ import { ParsedPGN } from "pgn-parser";
 import { SetStateAction, Dispatch } from "react";
 import { ReactNode } from "react";
 
-type Dispatcher<S> = Dispatch<SetStateAction<S>>;
+export type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 
 export interface IPgn {
   comments: null | string;

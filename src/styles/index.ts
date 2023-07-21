@@ -60,28 +60,6 @@ export const HorizontalMoveList = styled.div`
   font-size: 14px;
 `;
 
-export const ReturnButton = styled.div`
-  all: unset;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid var(--green-dark);
-  border-top: none;
-  border-left: none;
-  flex-basis: 33.33%;
-  width: 33.33%;
-  padding: 8px 0 10px;
-  box-shadow: 0px 2px 1px var(--green-dark);
-  background-color: var(--green);
-  color: var(--white-primary);
-  font-weight: 500;
-  font-size: 14px;
-  margin: 10px 5px 10px;
-  cursor: pointer;
-  text-shadow: 0 1px 0 var(--green-dark, rgba(0, 0, 0, 0.2)),
-    0 0.3rem 1.6rem rgba(0, 0, 0, 0.05);
-`;
-
 export const GameHistoryDate = styled.div`
   position: relative;
   display: flex;
@@ -110,6 +88,7 @@ export const LoaderWrap = styled.div`
 export const CustomErrorStyles = styled.div`
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;

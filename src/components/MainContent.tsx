@@ -9,11 +9,12 @@ import castle from "../assets/sounds/castle.mp3";
 import moveCheck from "../assets/sounds/move-check.mp3";
 import moveSelf from "../assets/sounds/move-self.mp3";
 import promote from "../assets/sounds/promote.mp3";
+import { IPlayersInfo, MainContentProps } from "../types/index.ts";
+import { getCountryData, getPlayerData } from "../utils/index.ts";
 //
 import NavBar from "./NavBar.tsx";
 import EvalBar from "./EvalBar.tsx";
 import CustomSquareRenderer from "./CustomSquareRenderer.tsx";
-import { IPlayersInfo, MainContentProps } from "../types/index.ts";
 import PlayerInformation from "./PlayerInformation.tsx";
 
 const MainContent = ({
@@ -61,21 +62,21 @@ const MainContent = ({
   }, [currentMoveNumber]);
 
   useEffect(() => {
-    const avatarLink = async () => {
+    const fetchPlayersInfo = async () => {
       if (!currentPgn) return;
       try {
-        const whiteResponse = await fetch(
-          `https://api.chess.com/pub/player/${currentPgn?.headers[4].value}`
-        );
-        const blackResponse = await fetch(
-          `https://api.chess.com/pub/player/${currentPgn?.headers[5].value}`
-        );
-        const whiteResult = await whiteResponse.json();
-        const blackResult = await blackResponse.json();
-        const whiteCountryResponse = await fetch(whiteResult.country);
-        const blackCountryResponse = await fetch(blackResult.country);
-        const whiteCountryResult = await whiteCountryResponse.json();
-        const blackCountryResult = await blackCountryResponse.json();
+        const whiteUsername = currentPgn?.headers[4].value;
+        const blackUsername = currentPgn?.headers[5].value;
+
+        const [whiteResult, blackResult] = await Promise.all([
+          getPlayerData(whiteUsername),
+          getPlayerData(blackUsername),
+        ]);
+
+        const [whiteCountryResult, blackCountryResult] = await Promise.all([
+          getCountryData(whiteResult.country),
+          getCountryData(blackResult.country),
+        ]);
 
         setPlayersInfo({
           white: {
@@ -93,7 +94,7 @@ const MainContent = ({
         console.log(error, "no info");
       }
     };
-    avatarLink();
+    fetchPlayersInfo();
   }, [currentPgn]);
 
   return (

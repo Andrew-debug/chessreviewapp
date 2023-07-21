@@ -1,13 +1,20 @@
 import { useRef, useState } from "react";
 import { GamesContainer, InputWrap } from "../styles/GameHistoryStyles";
+import { IPgn } from "../types";
 import useFetch from "../utils/useFetch";
 import FetchComponent from "./FetchComponent";
 import pgnParser from "pgn-parser";
 import ArchivedGame from "./ArchivedGame";
 import PrimaryButton from "./PrimaryButton";
 
-const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
-  const username = useRef("GothamChess");
+const FetchGamesByDate = ({
+  setcurrentPgn,
+  setPiecesTurn,
+}: {
+  setcurrentPgn: (pgn: IPgn) => void;
+  setPiecesTurn: (pieceTurn: string) => void;
+}) => {
+  const username = useRef("GothamChess"); // TODO: input loses value
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth() + 1);
   const [year, setYear] = useState(date.getFullYear());
@@ -23,30 +30,27 @@ const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
         useFetchStates={useGamesFetch}
         DataVisualisation={
           <GamesContainer>
-            <button
-              onClick={() => {
+            <PrimaryButton
+              text="Return"
+              handleClick={() => {
                 setPiecesTurn("white"); //TODO: if user presses the button, the pgn of the game stays, if he keeps scrolling moves, evalbar will be incorrect
                 useGamesFetch.resetData();
               }}
-            >
-              {"<="}
-            </button>
+            />
             {useGamesFetch.data?.games ? (
               useGamesFetch.data.games.length === 0 ? (
-                <div>no games this month</div>
+                <div>No games this month</div>
               ) : (
                 [...useGamesFetch.data.games]
                   .reverse()
                   .map((usersGameData, index) => {
                     const pgn = pgnParser.parse(usersGameData.pgn)[0];
-                    //@ts-ignore
                     pgn.rawPgn = usersGameData.pgn;
                     return (
                       <ArchivedGame
                         key={index}
                         usersGameData={usersGameData}
                         pgn={pgn}
-                        //@ts-ignore
                         setcurrentPgn={setcurrentPgn}
                         username={username}
                       />

@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
-import FetchComponent from "./FetchComponent";
 import { GamesContainer, InputWrap } from "../styles/GameHistoryStyles";
+import { GameHistoryDate } from "../styles";
+import { IPgn } from "../types";
+import FetchComponent from "./FetchComponent";
 import ArchivedGame from "./ArchivedGame";
 import pgnParser from "pgn-parser";
-import { GameHistoryDate, ReturnButton } from "../styles";
 import CustomError from "../utils/CustomError";
 import PrimaryButton from "./PrimaryButton";
 
@@ -11,8 +12,12 @@ const FetchGamesByUsername = ({
   setcurrentPgn,
   setPiecesTurn,
   setIsGamesFetched,
+}: {
+  setcurrentPgn: (pgn: IPgn) => void;
+  setPiecesTurn: (pieceTurn: string) => void;
+  setIsGamesFetched: (v: boolean) => void;
 }) => {
-  const username = useRef("GothamChess");
+  const username = useRef("GothamChess"); //TODO: input loses value
   const [allMonth, setAllMonth] = useState([]);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +62,7 @@ const FetchGamesByUsername = ({
         `https://api.chess.com/pub/player/${username.current}/games/archives`
       );
       const result = await response.json();
-      if (result.archives.length === 0) setError("no games");
+      if (result.archives.length === 0) setError("No games played");
       if (result.code === 0) setError("wrong username");
       if (result.archives.length !== 0) return result.archives;
     } catch (error) {
@@ -71,15 +76,14 @@ const FetchGamesByUsername = ({
         useFetchStates={{ data, isLoading, error }}
         DataVisualisation={
           <GamesContainer>
-            <ReturnButton
-              onClick={() => {
+            <PrimaryButton
+              text="Return"
+              handleClick={() => {
                 setPiecesTurn("white"); //TODO: if user presses the button, the pgn of the game stays, if he keeps scrolling moves, evalbar will be incorrect
                 setData(null);
                 setIsGamesFetched(false);
               }}
-            >
-              Return
-            </ReturnButton>
+            />
             {data &&
               Object.entries(data).map(([date, games], dateIndex) => {
                 return (

@@ -1,4 +1,5 @@
-import { CustomErrorStyles, ReturnButton } from "../styles";
+import PrimaryButton from "../components/PrimaryButton";
+import { CustomErrorStyles } from "../styles";
 
 interface Props {
   error: string;
@@ -16,15 +17,14 @@ const CustomError = ({
   return (
     <CustomErrorStyles>
       <p>{error}</p>
-      <ReturnButton
-        onClick={() => {
+      <PrimaryButton
+        text="Return"
+        handleClick={() => {
           setData(null);
           setIsGamesFetched(false);
           setError(null);
         }}
-      >
-        Return
-      </ReturnButton>
+      />
     </CustomErrorStyles>
   );
 };

@@ -1,10 +1,9 @@
+import { useState } from "react";
 import { IPgn } from "../types";
-//
 import { Container } from "../styles";
 import FetchGamesByUsername from "./FetchGamesByUsername";
 import FetchGamesByDate from "./FetchGamesByDate";
 import FetchGameByLink from "./FetchGameByLink";
-import { useState } from "react";
 import SectionButton from "./SectionButton";
 
 function GamesHisory({
@@ -59,12 +58,7 @@ function GamesHisory({
             setPiecesTurn={setPiecesTurn}
           />
         )}
-        {sections.byLink && (
-          <FetchGameByLink
-          // setcurrentPgn={setcurrentPgn}
-          // setPiecesTurn={setPiecesTurn}
-          />
-        )}
+        {sections.byLink && <FetchGameByLink />}
       </Container>
     </header>
   );
