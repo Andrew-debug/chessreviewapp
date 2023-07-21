@@ -1,23 +1,24 @@
 import ReactCountryFlag from "react-country-flag";
-import { getAfterLastSlash } from ".";
 
 const CountryFlag = ({
   size,
   playerCountry,
+  countryCode,
 }: {
   size: number;
   playerCountry: string;
+  countryCode: string;
 }) => {
   return (
     <ReactCountryFlag
-      countryCode={getAfterLastSlash(playerCountry)}
+      countryCode={countryCode}
       svg
       style={{
         width: size,
         height: size,
         paddingBottom: 2,
       }}
-      title={getAfterLastSlash(playerCountry)}
+      title={playerCountry}
     />
   );
 };

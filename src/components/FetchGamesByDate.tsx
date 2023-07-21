@@ -7,7 +7,7 @@ import ArchivedGame from "./ArchivedGame";
 import PrimaryButton from "./PrimaryButton";
 
 const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
-  const username = useRef("kaarelen");
+  const username = useRef("GothamChess");
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth() + 1);
   const [year, setYear] = useState(date.getFullYear());
@@ -64,7 +64,7 @@ const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
             Use <span>Chess.com</span> username
           </p>
           <input
-            placeholder={"kaarelen"}
+            placeholder={"GothamChess"}
             onChange={(e) => (username.current = e.target.value)}
           />
           <div style={{ color: "var(--white-primary)" }}>Month</div>

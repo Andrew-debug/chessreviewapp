@@ -12,7 +12,7 @@ const FetchGamesByUsername = ({
   setPiecesTurn,
   setIsGamesFetched,
 }) => {
-  const username = useRef("kaarelen");
+  const username = useRef("GothamChess");
   const [allMonth, setAllMonth] = useState([]);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -117,11 +117,11 @@ const FetchGamesByUsername = ({
             Use <span>Chess.com</span> username
           </p>
           <input
-            placeholder={"kaarelen"}
+            placeholder={"GothamChess"}
             onChange={(e) => (username.current = e.target.value)}
           />
           <PrimaryButton
-            text="aboba"
+            text="Search games"
             handleClick={async () => {
               fetchLastGames(await getMonthWithGames(), 50);
             }}

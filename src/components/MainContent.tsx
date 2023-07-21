@@ -72,12 +72,25 @@ const MainContent = ({
         );
         const whiteResult = await whiteResponse.json();
         const blackResult = await blackResponse.json();
+        const whiteCountryResponse = await fetch(whiteResult.country);
+        const blackCountryResponse = await fetch(blackResult.country);
+        const whiteCountryResult = await whiteCountryResponse.json();
+        const blackCountryResult = await blackCountryResponse.json();
+
         setPlayersInfo({
-          white: { avatar: whiteResult.avatar, country: whiteResult.country },
-          black: { avatar: blackResult.avatar, country: blackResult.country },
+          white: {
+            avatar: whiteResult.avatar,
+            country: whiteCountryResult.name,
+            countryCode: whiteCountryResult.code,
+          },
+          black: {
+            avatar: blackResult.avatar,
+            country: blackCountryResult.name,
+            countryCode: blackCountryResult.code,
+          },
         });
       } catch (error) {
-        console.log(error, "no avatar");
+        console.log(error, "no info");
       }
     };
     avatarLink();
@@ -91,6 +104,7 @@ const MainContent = ({
           currentPgn={currentPgn}
           avatar={playersInfo?.black.avatar!}
           country={playersInfo?.black.country!}
+          countryCode={playersInfo?.black.countryCode!}
         />
         <div style={{ display: "flex" }}>
           <EvalBar piecesTurn={piecesTurn} />
@@ -109,6 +123,7 @@ const MainContent = ({
           currentPgn={currentPgn}
           avatar={playersInfo?.white.avatar!}
           country={playersInfo?.white.country!}
+          countryCode={playersInfo?.white.countryCode!}
         />
       </main>
       <NavBar

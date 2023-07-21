@@ -8,11 +8,13 @@ const PlayerInformation = ({
   currentPgn,
   avatar,
   country,
+  countryCode,
 }: {
   color: string;
   currentPgn: IPgn;
   avatar: string;
   country: string;
+  countryCode: string;
 }) => {
   const username =
     color === "white"
@@ -32,7 +34,13 @@ const PlayerInformation = ({
       </span>
       <span>{currentPgn ? `(${userElo})` : ""}</span>
       <div style={{ marginLeft: 8 }}>
-        {country && <CountryFlag size={18} playerCountry={country} />}
+        {country && (
+          <CountryFlag
+            size={18}
+            playerCountry={country}
+            countryCode={countryCode}
+          />
+        )}
       </div>
     </ActiveUserData>
   );

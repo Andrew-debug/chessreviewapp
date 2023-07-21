@@ -102,6 +102,6 @@ export interface ISectionContext {
 }
 
 export interface IPlayersInfo {
-  white: { avatar: string; country: string };
-  black: { avatar: string; country: string };
+  white: { avatar: string; country: string; countryCode: string };
+  black: { avatar: string; country: string; countryCode: string };
 }
