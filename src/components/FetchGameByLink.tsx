@@ -1,7 +1,18 @@
 import React from "react";
 
 const FetchGameByLink = () => {
-  return <div>FetchGameByLink</div>;
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+      }}
+    >
+      Not implemented yet
+    </div>
+  );
 };
 
 export default FetchGameByLink;

@@ -3,8 +3,9 @@ import FetchComponent from "./FetchComponent";
 import { GamesContainer, InputWrap } from "../styles/GameHistoryStyles";
 import ArchivedGame from "./ArchivedGame";
 import pgnParser from "pgn-parser";
-import { ReturnButton } from "../styles";
+import { GameHistoryDate, ReturnButton } from "../styles";
 import CustomError from "../utils/CustomError";
+import PrimaryButton from "./PrimaryButton";
 
 const FetchGamesByUsername = ({
   setcurrentPgn,
@@ -60,9 +61,10 @@ const FetchGamesByUsername = ({
       if (result.code === 0) setError("wrong username");
       if (result.archives.length !== 0) return result.archives;
     } catch (error) {
-      console.log("something wrong");
+      return "something wrong";
     }
   };
+
   return (
     <>
       <FetchComponent
@@ -79,18 +81,10 @@ const FetchGamesByUsername = ({
               Return
             </ReturnButton>
             {data &&
-              Object.entries(data).map(([month, games], monthIndex) => {
+              Object.entries(data).map(([date, games], dateIndex) => {
                 return (
-                  <div key={monthIndex}>
-                    <div
-                      style={{
-                        width: "50%",
-                        borderBottom: "1px solid var(--silver)",
-                        marginLeft: 10,
-                      }}
-                    >
-                      {month}
-                    </div>
+                  <div key={dateIndex}>
+                    <GameHistoryDate>{date}</GameHistoryDate>
                     {[...games].reverse().map((usersGameData, index) => {
                       const pgn = pgnParser.parse(usersGameData.pgn)[0];
                       pgn.rawPgn = usersGameData.pgn;
@@ -119,27 +113,26 @@ const FetchGamesByUsername = ({
         }
       >
         <InputWrap>
-          <div style={{ color: "var(--white-primary)" }}>
-            Use Chess.com username
-          </div>
+          <p>
+            Use <span>Chess.com</span> username
+          </p>
           <input
             placeholder={"kaarelen"}
             onChange={(e) => (username.current = e.target.value)}
           />
-          <button
-            onClick={async () => {
+          <PrimaryButton
+            text="aboba"
+            handleClick={async () => {
               fetchLastGames(await getMonthWithGames(), 50);
             }}
-          >
-            aboba
-          </button>
-          <button
-            onClick={async () => {
+          />
+
+          {/* <PrimaryButton
+            text="KEKL"
+            handleClick={async () => {
               fetchLastGames(allMonth, 20);
             }}
-          >
-            KEKL
-          </button>
+          /> */}
         </InputWrap>
       </FetchComponent>
     </>

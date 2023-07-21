@@ -14,7 +14,6 @@ function GamesHisory({
   setcurrentPgn: (pgn: IPgn) => void;
   setPiecesTurn: (pieceTurn: string) => void;
 }) {
-  // https://api.chess.com/pub/player/kaarelen
   const [sections, setSections] = useState({
     byUsername: true,
     byDate: false,

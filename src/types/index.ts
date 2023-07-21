@@ -100,3 +100,8 @@ export interface ISectionContext {
   sections: ISections;
   setSections: (v: ISections) => void;
 }
+
+export interface IPlayersInfo {
+  white: { avatar: string; country: string };
+  black: { avatar: string; country: string };
+}

@@ -40,9 +40,12 @@ export const BlackBar = styled.div`
 `;
 
 export const ActiveUserData = styled.div`
+  display: flex;
   height: 40;
   margin-bottom: 10px;
   color: var(--white-primary);
+  margin: 5px 0 5px 46px;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 `;
 
 export const HorizontalMoveList = styled.div`
@@ -74,6 +77,26 @@ export const ReturnButton = styled.div`
   font-weight: 500;
   font-size: 14px;
   margin: 10px 5px 10px;
+  cursor: pointer;
+  text-shadow: 0 1px 0 var(--green-dark, rgba(0, 0, 0, 0.2)),
+    0 0.3rem 1.6rem rgba(0, 0, 0, 0.05);
+`;
+
+export const GameHistoryDate = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  width: 95%;
+  margin-left: 10;
+  ::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    width: 150px;
+    height: 1px;
+    background-color: var(--silver);
+  }
 `;
 
 export const LoaderWrap = styled.div`
@@ -89,4 +112,18 @@ export const CustomErrorStyles = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+interface IImgWrap {
+  width: number;
+  height: number;
+}
+export const ImgWrap = styled.div<IImgWrap>`
+  width: ${({ width }) => `${width}px`};
+  height: ${({ height }) => `${height}px`};
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 `;

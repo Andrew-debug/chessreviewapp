@@ -4,6 +4,7 @@ import useFetch from "../utils/useFetch";
 import FetchComponent from "./FetchComponent";
 import pgnParser from "pgn-parser";
 import ArchivedGame from "./ArchivedGame";
+import PrimaryButton from "./PrimaryButton";
 
 const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
   const username = useRef("kaarelen");
@@ -59,9 +60,9 @@ const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
         }
       >
         <InputWrap>
-          <div style={{ color: "var(--white-primary)" }}>
-            Use Chess.com username
-          </div>
+          <p>
+            Use <span>Chess.com</span> username
+          </p>
           <input
             placeholder={"kaarelen"}
             onChange={(e) => (username.current = e.target.value)}
@@ -78,7 +79,10 @@ const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
             value={year}
             onChange={(e) => setYear(+e.target.value)}
           />
-          <button onClick={useGamesFetch.fetchDataAction}>Search</button>
+          <PrimaryButton
+            text="Search games"
+            handleClick={useGamesFetch.fetchDataAction}
+          />
         </InputWrap>
       </FetchComponent>
     </>

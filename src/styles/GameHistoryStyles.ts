@@ -14,6 +14,14 @@ export const InputWrap = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  p {
+    margin: 5px 0;
+    color: var(--white-primary);
+    span {
+      font-weight: 600;
+      color: var(--green-light);
+    }
+  }
 `;
 
 interface ISectionStyles {
@@ -43,4 +51,9 @@ export const Section = styled.button<ISectionStyles>`
     sections[name] ? "var(--white-primary)" : "var(--button-active)"};
   font-weight: ${({ sections, name }) => (sections[name] ? 500 : 400)};
   font-size: 14px;
+  cursor: pointer;
+  text-shadow: ${({ sections, name }) =>
+    sections[name]
+      ? "0 1px 0 var(--green-dark, rgba(0, 0, 0, 0.2)),0 0.3rem 1.6rem rgba(0, 0, 0, 0.05)"
+      : "none"};
 `;

@@ -13,8 +13,8 @@ import promote from "../assets/sounds/promote.mp3";
 import NavBar from "./NavBar.tsx";
 import EvalBar from "./EvalBar.tsx";
 import CustomSquareRenderer from "./CustomSquareRenderer.tsx";
-import { ActiveUserData } from "../styles/index.ts";
-import { MainContentProps } from "../types/index.ts";
+import { IPlayersInfo, MainContentProps } from "../types/index.ts";
+import PlayerInformation from "./PlayerInformation.tsx";
 
 const MainContent = ({
   piecesTurn,
@@ -23,19 +23,20 @@ const MainContent = ({
 }: MainContentProps) => {
   const [game, setGame] = useState(new Chess());
   const [currentMoveNumber, setcurrentMoveNumber] = useState(-1); // TODO counter can't be > moves.length
+  const [playersInfo, setPlayersInfo] = useState<IPlayersInfo | null>(null);
+
   useEffect(() => {
     game.reset();
     setGame({ ...game });
     setcurrentMoveNumber(-1);
   }, [currentPgn]);
 
-  // useEffect(() => {
-  //   const pgn = new Pgn(game.pgn());
-  //   const uci_moves = pgn.history.moves.map((val: { uci: string }) => val.uci);
-  //   stockfishInterface.setPosition(uci_moves.join(" "));
-  // }, [currentMoveNumber]);
+  useEffect(() => {
+    const pgn = new Pgn(game.pgn());
+    const uci_moves = pgn.history.moves.map((val: { uci: string }) => val.uci);
+    stockfishInterface.setPosition(uci_moves.join(" "));
+  }, [currentMoveNumber]);
 
-  // the reaseon why i put it onclick is that to controll backward moves
   useEffect(() => {
     if (currentMoveNumber === -1) return;
 
@@ -59,17 +60,38 @@ const MainContent = ({
     }
   }, [currentMoveNumber]);
 
+  useEffect(() => {
+    const avatarLink = async () => {
+      if (!currentPgn) return;
+      try {
+        const whiteResponse = await fetch(
+          `https://api.chess.com/pub/player/${currentPgn?.headers[4].value}`
+        );
+        const blackResponse = await fetch(
+          `https://api.chess.com/pub/player/${currentPgn?.headers[5].value}`
+        );
+        const whiteResult = await whiteResponse.json();
+        const blackResult = await blackResponse.json();
+        setPlayersInfo({
+          white: { avatar: whiteResult.avatar, country: whiteResult.country },
+          black: { avatar: blackResult.avatar, country: blackResult.country },
+        });
+      } catch (error) {
+        console.log(error, "no avatar");
+      }
+    };
+    avatarLink();
+  }, [currentPgn]);
+
   return (
     <>
       <main style={{ margin: "0 20px" }}>
-        <ActiveUserData>
-          <span style={{ display: "flex" }}>
-            <span style={{ marginRight: 10 }}>
-              {currentPgn ? currentPgn.headers[5].value : "Opponent"}
-            </span>
-            <span>{currentPgn ? `(${currentPgn.headers[14].value})` : ""}</span>
-          </span>
-        </ActiveUserData>
+        <PlayerInformation
+          color="black"
+          currentPgn={currentPgn}
+          avatar={playersInfo?.black.avatar!}
+          country={playersInfo?.black.country!}
+        />
         <div style={{ display: "flex" }}>
           <EvalBar piecesTurn={piecesTurn} />
           <div style={{ display: "flex" }}>
@@ -82,14 +104,12 @@ const MainContent = ({
             />
           </div>
         </div>
-        <ActiveUserData>
-          <span style={{ display: "flex" }}>
-            <span style={{ marginRight: 10 }}>
-              {currentPgn ? currentPgn.headers[4].value : "Opponent"}
-            </span>
-            <span>{currentPgn ? `(${currentPgn.headers[13].value})` : ""}</span>
-          </span>
-        </ActiveUserData>
+        <PlayerInformation
+          color="white"
+          currentPgn={currentPgn}
+          avatar={playersInfo?.white.avatar!}
+          country={playersInfo?.white.country!}
+        />
       </main>
       <NavBar
         currentPgn={currentPgn!}
