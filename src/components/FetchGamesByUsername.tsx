@@ -21,40 +21,46 @@ const FetchGamesByUsername = ({
   const [allMonth, setAllMonth] = useState([]);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const fetchLastGames = async (allMonths, desiredGamesNum) => {
-    const allMonthLength = allMonths?.length;
-    let gamesReceived = 0;
+  const fetchLastGames = async (
+    allMonths: string[],
+    desiredGamesNum: number
+  ) => {
+    try {
+      const allMonthLength = allMonths?.length;
+      let gamesReceived = 0;
+      setIsLoading(true);
 
-    for (let index = 0; index < allMonthLength; index++) {
-      const lastMonth = allMonths.pop();
-      try {
-        setIsLoading(true);
-        const response = await fetch(lastMonth);
-        const result = await response.json();
-        const curGameDate = lastMonth.slice(-7);
-        setData({ ...data, [curGameDate]: result.games });
-        setIsGamesFetched(true);
-        gamesReceived += result.games.length;
-        if (gamesReceived >= desiredGamesNum) break;
-      } catch (error: any) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
+      if (allMonthLength > 0) {
+        for (let index = 0; index < allMonthLength; index++) {
+          const lastMonth = allMonths.pop();
+          const response = await fetch(lastMonth);
+          const result = await response.json();
+          const curGameDate = lastMonth.slice(-7);
+          setData({ ...data, [curGameDate]: result.games });
+          setIsGamesFetched(true);
+          gamesReceived += result.games.length;
+          if (gamesReceived >= desiredGamesNum) break;
+        }
       }
+    } catch (error: any) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
     }
+
     if (allMonths) {
       setAllMonth([...allMonths]);
     }
   };
 
-  const infiniteScrollRange = 20;
-  const getGemesForInfiniteScroll = (index) => {
-    let start = index * infiniteScrollRange - 20;
-    let stop = index * infiniteScrollRange;
-    if (data.length < stop) fetchLastGames(allMonth, stop - data.length);
-  };
+  // const infiniteScrollRange = 20;
+  // const getGemesForInfiniteScroll = (index) => {
+  //   let start = index * infiniteScrollRange - 20;
+  //   let stop = index * infiniteScrollRange;
+  //   if (data.length < stop) fetchLastGames(allMonth, stop - data.length);
+  // };
 
   const getMonthWithGames = async () => {
     try {
@@ -62,8 +68,11 @@ const FetchGamesByUsername = ({
         `https://api.chess.com/pub/player/${username.current}/games/archives`
       );
       const result = await response.json();
+      if (result.code === 0) {
+        setError("wrong username");
+        return [];
+      }
       if (result.archives.length === 0) setError("No games played");
-      if (result.code === 0) setError("wrong username");
       if (result.archives.length !== 0) return result.archives;
     } catch (error) {
       return "something wrong";
