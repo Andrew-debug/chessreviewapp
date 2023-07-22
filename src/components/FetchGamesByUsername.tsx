@@ -10,11 +10,9 @@ import PrimaryButton from "./PrimaryButton";
 
 const FetchGamesByUsername = ({
   setcurrentPgn,
-  setPiecesTurn,
   setIsGamesFetched,
 }: {
   setcurrentPgn: (pgn: IPgn) => void;
-  setPiecesTurn: (pieceTurn: string) => void;
   setIsGamesFetched: (v: boolean) => void;
 }) => {
   const username = useRef("GothamChess"); //TODO: input loses value
@@ -88,7 +86,6 @@ const FetchGamesByUsername = ({
             <PrimaryButton
               text="Return"
               handleClick={() => {
-                setPiecesTurn("white"); //TODO: if user presses the button, the pgn of the game stays, if he keeps scrolling moves, evalbar will be incorrect
                 setData(null);
                 setIsGamesFetched(false);
               }}

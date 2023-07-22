@@ -14,27 +14,27 @@ const stockfish_results = {
   bestMove: undefined,
   positionEval: undefined,
 };
-const notifyFront = () => {
+let notifyFront = () => {
   globalThis.dispatchEvent(stockfishResultsUpdated);
 };
+// notifyFront = debounce(notifyFront, 200)
 const stPost = (command: string) => {
   // console.log("SEND :::: ", command);
   stockfish.postMessage(command);
 };
 stPost("uci");
 stPost(
-  `setoption name Threads value ${
-    (window.navigator.hardwareConcurrency || 2) - 1
-  }`
+  `setoption name Threads value ${(window.navigator.hardwareConcurrency || 2) - 1}`
 );
 stPost("setoption name Hash value 512");
 
-let setPosition = debounce((uciStr: string, depth: number) => {
+const setPosition = debounce((uciStr: string, depth: number) => {
   stPost("stop");
   stPost("ucinewgame");
   stPost(`position startpos moves ${uciStr}`);
   stPost(`go depth ${depth}`);
 }, 500);
+
 // interface for react
 export const stockfishInterface = {
   depth: 18,

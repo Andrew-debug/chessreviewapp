@@ -9,12 +9,10 @@ import PrimaryButton from "./PrimaryButton";
 
 const FetchGamesByDate = ({
   setcurrentPgn,
-  setPiecesTurn,
 }: {
   setcurrentPgn: (pgn: IPgn) => void;
-  setPiecesTurn: (pieceTurn: string) => void;
 }) => {
-  const username = useRef("GothamChess"); // TODO: input loses value
+  const username = useRef("GothamChess");
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth() + 1);
   const [year, setYear] = useState(date.getFullYear());
@@ -30,10 +28,8 @@ const FetchGamesByDate = ({
         useFetchStates={useGamesFetch}
         DataVisualisation={
           <GamesContainer>
-            <PrimaryButton
-              text="Return"
-              handleClick={() => {
-                setPiecesTurn("white"); //TODO: if user presses the button, the pgn of the game stays, if he keeps scrolling moves, evalbar will be incorrect
+            <button
+              onClick={() => {
                 useGamesFetch.resetData();
               }}
             />
