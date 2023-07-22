@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import { stockfishInterface } from "../stockfish.ts";
@@ -16,25 +16,41 @@ import CustomSquareRenderer from "./CustomSquareRenderer.tsx";
 import { IPlayersInfo, MainContentProps } from "../types/index.ts";
 import PlayerInformation from "./PlayerInformation.tsx";
 
+// TODO: move it
+const useIsMount = () => {
+  const isMountRef = useRef(false);
+  useEffect(() => {
+    isMountRef.current = true;
+  }, []);
+  return isMountRef.current;
+};
+
 const MainContent = ({
-  piecesTurn,
   currentPgn,
-  setPiecesTurn,
 }: MainContentProps) => {
   const [game, setGame] = useState(new Chess());
   const [currentMoveNumber, setcurrentMoveNumber] = useState(-1); // TODO counter can't be > moves.length
   const [playersInfo, setPlayersInfo] = useState<IPlayersInfo | null>(null);
+  const isMount = useIsMount();
 
-  useEffect(() => {
-    game.reset();
-    setGame({ ...game });
-    setcurrentMoveNumber(-1);
-  }, [currentPgn]);
-
-  useEffect(() => {
+  const fishGiveMeYourOpinion = () => {
     const pgn = new Pgn(game.pgn());
     const uci_moves = pgn.history.moves.map((val: { uci: string }) => val.uci);
     stockfishInterface.setPosition(uci_moves.join(" "));
+  }
+  useEffect(() => {
+    game.reset();
+    setGame({ ...game });
+    setcurrentMoveNumber(-1)
+    if (currentPgn) { // start fish on game load
+      fishGiveMeYourOpinion()
+    }
+  }, [currentPgn]);
+
+  useEffect(() => {
+    if (isMount) {
+      fishGiveMeYourOpinion()
+    }
   }, [currentMoveNumber]);
 
   useEffect(() => {
@@ -107,7 +123,7 @@ const MainContent = ({
           countryCode={playersInfo?.black.countryCode!}
         />
         <div style={{ display: "flex" }}>
-          <EvalBar piecesTurn={piecesTurn} />
+          <EvalBar currentMoveNumber={currentMoveNumber} />
           <div style={{ display: "flex" }}>
             <Chessboard
               id="CustomSquare"
@@ -132,7 +148,6 @@ const MainContent = ({
         setGame={setGame}
         setcurrentMoveNumber={setcurrentMoveNumber}
         currentMoveNumber={currentMoveNumber}
-        setPiecesTurn={setPiecesTurn}
       />
     </>
   );

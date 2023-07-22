@@ -9,10 +9,8 @@ import SectionButton from "./SectionButton";
 
 function GamesHisory({
   setcurrentPgn,
-  setPiecesTurn,
 }: {
   setcurrentPgn: (pgn: IPgn) => void;
-  setPiecesTurn: (pieceTurn: string) => void;
 }) {
   const [sections, setSections] = useState({
     byUsername: true,
@@ -49,20 +47,17 @@ function GamesHisory({
         {sections.byUsername && (
           <FetchGamesByUsername
             setcurrentPgn={setcurrentPgn}
-            setPiecesTurn={setPiecesTurn}
             setIsGamesFetched={setIsGamesFetched}
           />
         )}
         {sections.byDate && (
           <FetchGamesByDate
             setcurrentPgn={setcurrentPgn}
-            setPiecesTurn={setPiecesTurn}
           />
         )}
         {sections.byLink && (
           <FetchGameByLink
           // setcurrentPgn={setcurrentPgn}
-          // setPiecesTurn={setPiecesTurn}
           />
         )}
       </Container>

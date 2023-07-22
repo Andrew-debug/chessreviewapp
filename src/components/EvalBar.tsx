@@ -1,26 +1,16 @@
-import { useState, useEffect } from "react";
 import { Bar, BlackBar } from "../styles";
 import { useGetPositionData } from "../utils/useGetPositionData.ts";
 
-function EvalBar({ piecesTurn }: { piecesTurn: string }) {
-  const [filteredEval, setFilteredEval] = useState(0);
+function EvalBar({ currentMoveNumber }: { currentMoveNumber: number }) {
+  let { positionEval } = useGetPositionData();
 
-  const { positionEval } = useGetPositionData();
-
-  useEffect(() => {
-    if (piecesTurn === "black") {
-      // reverse eval because stockfish sends data from POV of white only
-      const reversedEval = positionEval * -1;
-      setFilteredEval(reversedEval);
-    } else {
-      setFilteredEval(positionEval);
-    }
-  }, [positionEval]);
-
-  let evalScore = filteredEval;
-  if (!evalScore) evalScore = 0;
-  if (filteredEval > 400) evalScore = 400;
-  if (filteredEval < -400) evalScore = -400;
+  if (currentMoveNumber % 2 === 0) {
+    positionEval *= -1
+  }
+  let filteredEval = positionEval
+  let minmax = 400
+  if (filteredEval > minmax) filteredEval = minmax;
+  if (filteredEval < -minmax) filteredEval = -minmax;
   return (
     <Bar>
       <div
@@ -35,22 +25,18 @@ function EvalBar({ piecesTurn }: { piecesTurn: string }) {
         <div
           style={{
             color:
-              filteredEval > 0
-                ? "var(--black-primary)"
-                : "var(--white-primary)",
+            positionEval <= 0
+                ? "var(--white-primary)" :
+                "var(--black-primary)",
             position: "absolute",
-            top: filteredEval > 0 ? 680 : 5,
+            top: positionEval <= 0 ? 5 : 680,
             left: 6,
           }}
         >
-          {filteredEval
-            ? evalScore < 0
-              ? Math.abs(filteredEval / 100).toFixed(1)
-              : (filteredEval / 100).toFixed(1)
-            : "0.0"}
+          {Math.abs(positionEval / 100).toFixed(1)}
         </div>
       </div>
-      <BlackBar evalScore={evalScore} />
+      <BlackBar evalScore={filteredEval} />
     </Bar>
   );
 }

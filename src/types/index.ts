@@ -48,7 +48,6 @@ export interface BlackWhiteMoveProps {
   setGame: Dispatcher<ChessInstance>;
   setcurrentMoveNumber: Dispatcher<number>;
   currentMoveNumber: number;
-  setPiecesTurn: Dispatcher<string>;
 }
 
 export interface NavBarProps {
@@ -57,7 +56,6 @@ export interface NavBarProps {
   setGame: Dispatcher<ChessInstance>;
   currentMoveNumber: number;
   setcurrentMoveNumber: Dispatcher<number>;
-  setPiecesTurn: Dispatcher<string>;
 }
 
 export interface FetchComponentProps {
@@ -77,9 +75,7 @@ export interface FetchComponentProps {
 }
 
 export interface MainContentProps {
-  piecesTurn: string;
   currentPgn: IPgn;
-  setPiecesTurn: Dispatcher<string>;
 }
 
 export interface NavButtonsProps {
@@ -88,7 +84,6 @@ export interface NavButtonsProps {
   currentMoveNumber: number;
   setcurrentMoveNumber: Dispatcher<number>;
   currentPgn: IPgn;
-  setPiecesTurn: Dispatcher<string>;
 }
 
 export interface ISections {

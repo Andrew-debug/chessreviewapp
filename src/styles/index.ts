@@ -36,7 +36,7 @@ export const BlackBar = styled.div`
   width: 100%;
   z-index: 1;
   transform: ${({ evalScore }: { evalScore: number }) =>
-    `translate3d(0px, ${100 - (evalScore / 100 + 5) * 10}%, 0px)`};
+    `translate3d(0px, ${(500 - evalScore) / 10}%, 0px)`};
 `;
 
 export const ActiveUserData = styled.div`

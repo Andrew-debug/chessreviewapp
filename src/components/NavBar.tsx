@@ -14,7 +14,6 @@ const NavBar = ({
   setGame,
   setcurrentMoveNumber,
   currentMoveNumber,
-  setPiecesTurn,
 }: NavBarProps) => {
   // let white_color;
   // let black_color;
@@ -99,7 +98,6 @@ const NavBar = ({
                       .forEach((item) => game.move(item.move));
                     setGame({ ...game });
                     setcurrentMoveNumber(index);
-                    setPiecesTurn(index % 2 === 0 ? "white" : "black");
                   }}
                 >
                   {move.move}
@@ -132,7 +130,6 @@ const NavBar = ({
             currentMoveNumber={currentMoveNumber}
             setcurrentMoveNumber={setcurrentMoveNumber}
             currentPgn={currentPgn}
-            setPiecesTurn={setPiecesTurn} //TODO: remove it
           />
         </div>
       </Container>

@@ -12,7 +12,6 @@ function NavButtons({
   currentMoveNumber,
   setcurrentMoveNumber,
   currentPgn,
-  setPiecesTurn,
 }: NavButtonsProps) {
   return (
     <>
@@ -63,7 +62,6 @@ function NavButtons({
               game.undo();
               setGame({ ...game });
               setcurrentMoveNumber((prev) => (prev > -1 ? (prev -= 1) : prev));
-              setPiecesTurn((prev) => (prev === "white" ? "black" : "white"));
             }}
             disabled={
               currentPgn ? (currentMoveNumber === -1 ? true : false) : true
@@ -94,7 +92,6 @@ function NavButtons({
               game.move(currentPgn.moves[currentMoveNumber + 1]?.move);
               setGame({ ...game });
               setcurrentMoveNumber((prev) => (prev += 1));
-              setPiecesTurn((prev) => (prev === "white" ? "black" : "white"));
             }}
             disabled={
               currentPgn

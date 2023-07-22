@@ -6,7 +6,7 @@ import pgnParser from "pgn-parser";
 import ArchivedGame from "./ArchivedGame";
 import PrimaryButton from "./PrimaryButton";
 
-const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
+const FetchGamesByDate = ({ setcurrentPgn }) => {
   const username = useRef("GothamChess");
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth() + 1);
@@ -25,7 +25,6 @@ const FetchGamesByDate = ({ setcurrentPgn, setPiecesTurn }) => {
           <GamesContainer>
             <button
               onClick={() => {
-                setPiecesTurn("white"); //TODO: if user presses the button, the pgn of the game stays, if he keeps scrolling moves, evalbar will be incorrect
                 useGamesFetch.resetData();
               }}
             >
