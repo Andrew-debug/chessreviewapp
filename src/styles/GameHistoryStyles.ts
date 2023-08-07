@@ -40,7 +40,6 @@ export const Section = styled.button<ISectionStyles>`
   border-left: none;
   flex-basis: 33.33%;
   width: 33.33%;
-  height: 50;
   padding: 8px 0 10px;
   margin: 0 2px;
   box-shadow: ${({ sections, name }) =>

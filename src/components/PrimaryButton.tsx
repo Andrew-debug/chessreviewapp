@@ -12,6 +12,7 @@ const Button = styled.div`
   font-weight: 500;
   text-shadow: 0 1px 0 var(--green-dark, rgba(0, 0, 0, 0.2)),
     0 0.3rem 1.6rem rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 `;
 
 const PrimaryButton = ({

@@ -4,7 +4,7 @@ import blitz from "../assets/icons/blitz.svg";
 import bullet from "../assets/icons/bullet.svg";
 import custom from "../assets/icons/custom.svg";
 import daily from "../assets/icons/daily.svg";
-import { ArchivedGameProps } from "../types";
+import { ArchivedGameProps, IPgn } from "../types";
 import {
   ArchivedGameContainer,
   BlackSquare,
@@ -28,7 +28,8 @@ const ArchivedGame = ({
         <GameWrap
           style={{ padding: 10 }}
           onClick={() => {
-            if (pgn?.headers![0].value === "Live Chess") setcurrentPgn(pgn);
+            if (pgn?.headers![0].value === "Live Chess")
+              setcurrentPgn(pgn as IPgn);
           }}
         >
           <div

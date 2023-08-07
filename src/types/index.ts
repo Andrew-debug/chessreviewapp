@@ -3,14 +3,18 @@ import { ParsedPGN } from "pgn-parser";
 import { SetStateAction, Dispatch } from "react";
 import { ReactNode } from "react";
 
-export type Dispatcher<S> = Dispatch<SetStateAction<S>>;
+type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 
+interface PieceMove {
+  move: string;
+  move_number: number;
+}
 export interface IPgn {
   comments: null | string;
   comments_above_header: null | string;
   headers: { value: string }[];
   moves: PieceMove[];
-  rawPgn: string;
+  // rawPgn: string;
   result: string;
 }
 
@@ -25,29 +29,14 @@ export interface UsersGameData {
     result: string;
   };
   time_class: string;
+  pgn: string;
 }
 
 export interface ArchivedGameProps {
   pgn: ParsedPGN;
-  setcurrentPgn: (pgn: ParsedPGN) => void;
+  setcurrentPgn: (pgn: IPgn) => void;
   usersGameData: UsersGameData;
   username: { current: string };
-}
-
-export interface PieceMove {
-  move: string;
-  move_number: number;
-}
-
-export interface BlackWhiteMoveProps {
-  wm: PieceMove;
-  bm: PieceMove;
-  index: number;
-  currentPgn: IPgn;
-  game: ChessInstance;
-  setGame: Dispatcher<ChessInstance>;
-  setcurrentMoveNumber: Dispatcher<number>;
-  currentMoveNumber: number;
 }
 
 export interface NavBarProps {
@@ -58,15 +47,16 @@ export interface NavBarProps {
   setcurrentMoveNumber: Dispatcher<number>;
 }
 
+interface FetchComponenDataGames {
+  games: UsersGameData[];
+}
+export interface FetchComponentDataGamesWithDateKey {
+  [key: string]: UsersGameData[];
+}
 export interface FetchComponentProps {
   children: ReactNode;
   useFetchStates: {
-    data:
-      | {
-          games: UsersGameData[];
-        }
-      | { [key: string]: { games: UsersGameData[] } }
-      | null;
+    data: FetchComponenDataGames | FetchComponentDataGamesWithDateKey | null;
     isLoading: boolean;
     error: any;
   };

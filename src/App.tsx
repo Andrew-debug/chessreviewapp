@@ -8,12 +8,8 @@ function App() {
   const [currentPgn, setcurrentPgn] = useState<IPgn>();
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <GamesHisory
-        setcurrentPgn={setcurrentPgn}
-      />
-      <MainContent
-        currentPgn={currentPgn!}
-      />
+      <GamesHisory setcurrentPgn={setcurrentPgn} />
+      <MainContent currentPgn={currentPgn!} />
     </div>
   );
 }

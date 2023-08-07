@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { GamesContainer, InputWrap } from "../styles/GameHistoryStyles";
 import { GameHistoryDate } from "../styles";
-import { IPgn } from "../types";
+import { FetchComponentDataGamesWithDateKey, IPgn } from "../types";
 import FetchComponent from "./FetchComponent";
 import ArchivedGame from "./ArchivedGame";
 import pgnParser from "pgn-parser";
@@ -16,8 +16,10 @@ const FetchGamesByUsername = ({
   setIsGamesFetched: (v: boolean) => void;
 }) => {
   const username = useRef("GothamChess"); //TODO: input loses value
-  const [allMonth, setAllMonth] = useState([]);
-  const [data, setData] = useState(null);
+  // const [allMonth, setAllMonth] = useState([]);
+  const [data, setData] = useState<FetchComponentDataGamesWithDateKey | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,11 +33,11 @@ const FetchGamesByUsername = ({
       setIsLoading(true);
 
       if (allMonthLength > 0) {
+        const lastMonth = allMonths.pop();
         for (let index = 0; index < allMonthLength; index++) {
-          const lastMonth = allMonths.pop();
-          const response = await fetch(lastMonth);
+          const response = await fetch(lastMonth as string);
           const result = await response.json();
-          const curGameDate = lastMonth.slice(-7);
+          const curGameDate = lastMonth!.slice(-7);
           setData({ ...data, [curGameDate]: result.games });
           setIsGamesFetched(true);
           gamesReceived += result.games.length;
@@ -48,9 +50,9 @@ const FetchGamesByUsername = ({
       setIsLoading(false);
     }
 
-    if (allMonths) {
-      setAllMonth([...allMonths]);
-    }
+    // if (allMonths) {
+    //   setAllMonth([...allMonths]);
+    // }
   };
 
   // const infiniteScrollRange = 20;
@@ -70,7 +72,10 @@ const FetchGamesByUsername = ({
         setError("wrong username");
         return [];
       }
-      if (result.archives.length === 0) setError("No games played");
+      if (result.archives.length === 0) {
+        setError("No games played");
+        return [];
+      }
       if (result.archives.length !== 0) return result.archives;
     } catch (error) {
       return "something wrong";
@@ -97,7 +102,7 @@ const FetchGamesByUsername = ({
                     <GameHistoryDate>{date}</GameHistoryDate>
                     {[...games].reverse().map((usersGameData, index) => {
                       const pgn = pgnParser.parse(usersGameData.pgn)[0];
-                      pgn.rawPgn = usersGameData.pgn;
+                      // pgn.rawPgn = usersGameData.pgn;
                       return (
                         <ArchivedGame
                           key={index}
@@ -115,7 +120,7 @@ const FetchGamesByUsername = ({
         }
         CustomErrorRenderer={
           <CustomError
-            error={error}
+            error={error!}
             setData={setData}
             setIsGamesFetched={setIsGamesFetched}
             setError={setError}

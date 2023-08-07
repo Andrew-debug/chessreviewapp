@@ -3,7 +3,7 @@ import { GamesContainer, InputWrap } from "../styles/GameHistoryStyles";
 import { IPgn } from "../types";
 import useFetch from "../utils/useFetch";
 import FetchComponent from "./FetchComponent";
-import pgnParser from "pgn-parser";
+import pgnParser, { ParsedPGN } from "pgn-parser";
 import ArchivedGame from "./ArchivedGame";
 import PrimaryButton from "./PrimaryButton";
 
@@ -40,8 +40,10 @@ const FetchGamesByDate = ({
                 [...useGamesFetch.data.games]
                   .reverse()
                   .map((usersGameData, index) => {
-                    const pgn = pgnParser.parse(usersGameData.pgn)[0];
-                    pgn.rawPgn = usersGameData.pgn;
+                    const pgn: ParsedPGN = pgnParser.parse(
+                      usersGameData.pgn
+                    )[0];
+                    // pgn.rawPgn = usersGameData.pgn;
                     return (
                       <ArchivedGame
                         key={index}

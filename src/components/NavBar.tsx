@@ -3,7 +3,7 @@ import _ from "lodash";
 // import ChartComponent from "./ChartComponent";
 // import FetchComponent from "./FetchComponent";
 import NavButtons from "./NavButtons";
-import { NavBarProps, PieceMove } from "../types";
+import { NavBarProps } from "../types";
 import { useGetPositionData } from "../utils/useGetPositionData";
 import { Container, HorizontalMoveList } from "../styles";
 import { Move, MoveWrap, Turn } from "../styles/blackWhiteMoveStyles";
@@ -94,7 +94,7 @@ const NavBar = ({
                   onClick={() => {
                     game.reset();
                     currentPgn.moves
-                      .slice(0, index)
+                      .slice(0, index + 1)
                       .forEach((item) => game.move(item.move));
                     setGame({ ...game });
                     setcurrentMoveNumber(index);
