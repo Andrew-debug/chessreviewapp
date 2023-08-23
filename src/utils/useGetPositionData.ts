@@ -2,7 +2,10 @@ import { useSyncExternalStore } from "react";
 import { stockfishResultsUpdated } from "../stockfishEvents";
 import { stockfishInterface } from "../stockfish";
 
-export const useGetPositionData: () => { bestMove: string, positionEval: number } = () => {
+const useGetPositionData: () => {
+  bestMove: string;
+  positionEval: number;
+} = () => {
   const stockfish_results = useSyncExternalStore(
     (callback) => {
       addEventListener(stockfishResultsUpdated.type, callback);
@@ -12,5 +15,7 @@ export const useGetPositionData: () => { bestMove: string, positionEval: number 
     },
     () => JSON.stringify(stockfishInterface.getResults())
   ); // TODO: remake on separate signals
-  return { bestMove: '', positionEval: 0, ...JSON.parse(stockfish_results) };
+  return { bestMove: "", positionEval: 0, ...JSON.parse(stockfish_results) };
 };
+
+export default useGetPositionData;

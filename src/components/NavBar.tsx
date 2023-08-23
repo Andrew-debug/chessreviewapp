@@ -4,7 +4,7 @@ import _ from "lodash";
 // import FetchComponent from "./FetchComponent";
 import NavButtons from "./NavButtons";
 import { NavBarProps } from "../types";
-import { useGetPositionData } from "../utils/useGetPositionData";
+import useGetPositionData from "../utils/useGetPositionData";
 import { Container, HorizontalMoveList } from "../styles";
 import { Move, MoveWrap, Turn } from "../styles/blackWhiteMoveStyles";
 

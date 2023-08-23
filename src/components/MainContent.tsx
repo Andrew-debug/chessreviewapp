@@ -9,13 +9,14 @@ import castle from "../assets/sounds/castle.mp3";
 import moveCheck from "../assets/sounds/move-check.mp3";
 import moveSelf from "../assets/sounds/move-self.mp3";
 import promote from "../assets/sounds/promote.mp3";
-import { IPlayersInfo, MainContentProps } from "../types/index.ts";
-import { getCountryData, getPlayerData } from "../utils/index.ts";
+import { MainContentProps } from "../types/index.ts";
 //
 import NavBar from "./NavBar.tsx";
 import EvalBar from "./EvalBar.tsx";
 import CustomSquareRenderer from "./CustomSquareRenderer.tsx";
 import PlayerInformation from "./PlayerInformation.tsx";
+import useGetPlayersInfo from "../utils/useGetPlayersInfo.ts";
+// import useGetPositionData from "../utils/useGetPositionData.ts";
 
 // TODO: move it
 const useIsMount = () => {
@@ -26,31 +27,30 @@ const useIsMount = () => {
   return isMountRef.current;
 };
 
-const MainContent = ({
-  currentPgn,
-}: MainContentProps) => {
+const MainContent = ({ currentPgn }: MainContentProps) => {
   const [game, setGame] = useState(new Chess());
   const [currentMoveNumber, setcurrentMoveNumber] = useState(-1); // TODO counter can't be > moves.length
-  const [playersInfo, setPlayersInfo] = useState<IPlayersInfo | null>(null);
   const isMount = useIsMount();
+  const playersInfo = useGetPlayersInfo(currentPgn);
 
   const fishGiveMeYourOpinion = () => {
     const pgn = new Pgn(game.pgn());
     const uci_moves = pgn.history.moves.map((val: { uci: string }) => val.uci);
     stockfishInterface.setPosition(uci_moves.join(" "));
-  }
+  };
   useEffect(() => {
     game.reset();
     setGame({ ...game });
-    setcurrentMoveNumber(-1)
-    if (currentPgn) { // start fish on game load
-      fishGiveMeYourOpinion()
+    setcurrentMoveNumber(-1);
+    if (currentPgn) {
+      // start fish on game load
+      fishGiveMeYourOpinion();
     }
   }, [currentPgn]);
 
   useEffect(() => {
     if (isMount) {
-      fishGiveMeYourOpinion()
+      fishGiveMeYourOpinion();
     }
   }, [currentMoveNumber]);
 
@@ -77,42 +77,9 @@ const MainContent = ({
     }
   }, [currentMoveNumber]);
 
-  useEffect(() => {
-    const fetchPlayersInfo = async () => {
-      if (!currentPgn) return;
-      try {
-        const whiteUsername = currentPgn?.headers[4].value;
-        const blackUsername = currentPgn?.headers[5].value;
-
-        const [whiteResult, blackResult] = await Promise.all([
-          getPlayerData(whiteUsername),
-          getPlayerData(blackUsername),
-        ]);
-
-        const [whiteCountryResult, blackCountryResult] = await Promise.all([
-          getCountryData(whiteResult.country),
-          getCountryData(blackResult.country),
-        ]);
-
-        setPlayersInfo({
-          white: {
-            avatar: whiteResult.avatar,
-            country: whiteCountryResult.name,
-            countryCode: whiteCountryResult.code,
-          },
-          black: {
-            avatar: blackResult.avatar,
-            country: blackCountryResult.name,
-            countryCode: blackCountryResult.code,
-          },
-        });
-      } catch (error) {
-        console.log(error, "no info");
-      }
-    };
-    fetchPlayersInfo();
-  }, [currentPgn]);
-
+  // const { bestMove } = useGetPositionData();
+  // const regex = /([a-h][1-8])/g;
+  // console.log(bestMove.match(regex));
   return (
     <>
       <main style={{ margin: "0 20px" }}>
@@ -125,13 +92,14 @@ const MainContent = ({
         />
         <div style={{ display: "flex" }}>
           <EvalBar currentMoveNumber={currentMoveNumber} />
-          <div style={{ display: "flex" }}>
+          <div style={{ position: "relative" }}>
             <Chessboard
               id="CustomSquare"
               animationDuration={100}
               boardWidth={700}
               position={game.fen()}
               customSquare={CustomSquareRenderer}
+              // customArrows={[bestMove.match(regex)]}
             />
           </div>
         </div>

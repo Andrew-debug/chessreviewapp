@@ -1,14 +1,14 @@
 import { Bar, BlackBar } from "../styles";
-import { useGetPositionData } from "../utils/useGetPositionData.ts";
+import useGetPositionData from "../utils/useGetPositionData.ts";
 
 function EvalBar({ currentMoveNumber }: { currentMoveNumber: number }) {
   let { positionEval } = useGetPositionData();
 
   if (currentMoveNumber % 2 === 0) {
-    positionEval *= -1
+    positionEval *= -1;
   }
-  let filteredEval = positionEval
-  let minmax = 400
+  let filteredEval = positionEval;
+  let minmax = 400;
   if (filteredEval > minmax) filteredEval = minmax;
   if (filteredEval < -minmax) filteredEval = -minmax;
   return (
@@ -25,9 +25,9 @@ function EvalBar({ currentMoveNumber }: { currentMoveNumber: number }) {
         <div
           style={{
             color:
-            positionEval <= 0
-                ? "var(--white-primary)" :
-                "var(--black-primary)",
+              positionEval <= 0
+                ? "var(--white-primary)"
+                : "var(--black-primary)",
             position: "absolute",
             top: positionEval <= 0 ? 5 : 680,
             left: 6,
