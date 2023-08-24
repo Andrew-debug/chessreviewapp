@@ -17,27 +17,6 @@ export const GameLink = styled.a`
     color: var(--button-hovered);
   }
 `;
-export const Bar = styled.div`
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  position: relative;
-  width: 26px;
-  background-color: var(--black-primary);
-  margin: 0 10px;
-  overflow: hidden;
-`;
-
-export const BlackBar = styled.div`
-  background-color: var(--white-primary);
-  bottom: 0;
-  height: 100%;
-  left: 0;
-  position: absolute;
-  transition: transform 1s ease-in;
-  width: 100%;
-  z-index: 1;
-  transform: ${({ evalScore }: { evalScore: number }) =>
-    `translate3d(0px, ${(500 - evalScore) / 10}%, 0px)`};
-`;
 
 export const ActiveUserData = styled.div`
   display: flex;
